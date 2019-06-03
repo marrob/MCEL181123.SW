@@ -28,15 +28,11 @@ namespace Konvolucio.MCEL181123
 
         //void ProgressBarUpdate(ProgressChangedEventArgs arg);
         //void Close();
-        string Version { get; set; }
-        string LastModified { get; set; }
-        string LoadTime { get; set; }
-        string RowCoulmn { get; set; }
-        void StatusClear();
 
         IMainViewControl MainView { get; }
 
         ToolStripItem[] MenuBar { set; }
+        ToolStripItem[] StatusBar { set; }
 
         bool AlwaysOnTop { get; set; }
 
@@ -56,41 +52,15 @@ namespace Konvolucio.MCEL181123
             set { menuStrip1.Items.AddRange(value); }
         }
 
-        public string Version
+        public ToolStripItem[] StatusBar
         {
-            get { return toolStripStatusLabelVersion.Text; }
-            set { toolStripStatusLabelVersion.Text = value; }
-        }
-
-        public string LastModified
-        {
-            get { return toolStripStatusLabelLastModify.Text; }
-            set { toolStripStatusLabelLastModify.Text = value; }
-        }
-
-        public string LoadTime
-        {
-            get { return toolStripStatusLoadTime.Text; }
-            set { toolStripStatusLoadTime.Text = value; }
-        }
-
-        public string RowCoulmn
-        {
-            get { return toolStripStatusLabelRowColumn.Text; }
-            set { toolStripStatusLabelRowColumn.Text = value; }
+            set { statusStrip1.Items.AddRange(value); }
         }
 
         public bool AlwaysOnTop
         {
             get { return this.TopMost; }
             set { this.TopMost = value; }
-        }
-
-        public void StatusClear()
-        {
-            LastModified = "-";
-            LoadTime = "-";
-            RowCoulmn = "-";
         }
 
         public MainForm()

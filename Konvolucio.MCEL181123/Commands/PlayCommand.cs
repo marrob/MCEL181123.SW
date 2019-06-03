@@ -8,11 +8,11 @@
 
     internal sealed class PlayCommand : ToolStripMenuItem
     {
-        private readonly IIoService _adapter;
+        private readonly IIoService _ioService;
 
-        public PlayCommand(IIoService adapter)
+        public PlayCommand(IIoService ioService)
         {
-            _adapter = adapter;
+            _ioService = ioService;
             Image = Resources.Play_48x48;
             Text = "Run";
             ShortcutKeys = Keys.F5;
@@ -30,7 +30,7 @@
 
             if (Enabled)
             {
-                _adapter.Play();
+                _ioService.Play();
             }
         }
     }

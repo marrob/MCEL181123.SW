@@ -12,9 +12,9 @@ namespace Konvolucio.MCEL181123
         {
         }
 
-        public NiCanIoException(int status)
+        public NiCanIoException(int status):base(NiCanTools.StatusToString(status))
         {
-            new Exception(NiCanTools.StatusToString(status));
+
         }
 
         public NiCanIoException(string message)

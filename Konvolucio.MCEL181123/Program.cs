@@ -38,10 +38,10 @@ namespace Konvolucio.MCEL181123
         IMainForm _mainForm = new MainForm();
         IIoService _ioService = new IoService();
 
+
         public App()
         {
             /* Main Form */
-            _mainForm.Version = Application.ProductVersion;
             _mainForm.Text = AppConstants.SoftwareTitle + " - " + Application.ProductVersion;
             _mainForm.Shown += MainForm_Shown;
             _mainForm.FormClosing += MainForm_FormClosing;
@@ -51,7 +51,11 @@ namespace Konvolucio.MCEL181123
             _ioService.Started += IoService_Started;
             _ioService.Stopped += IoService_Stopped;
 
-            /* Main Menu */
+            /*TimerService*/
+            TimerService.Instance.Interval = 1000;
+
+            #region MenuBar    
+            /* Menu Bar */
             var configMenu = new ToolStripMenuItem("Config");
             configMenu.DropDown.Items.AddRange(
                 new ToolStripItem[]
@@ -82,6 +86,22 @@ namespace Konvolucio.MCEL181123
                     //viewMenu,
                     helpMenu,
                 };
+            #endregion
+
+            #region StatusBar
+
+            /* StatusBar */
+            _mainForm.StatusBar = new ToolStripItem[]
+            {
+                new StatusBar.PendingFramesStatus(_ioService),
+                new StatusBar.ParsedFramesStatus(_ioService),
+                new StatusBar.DroppedFramesStatus(_ioService),
+                new StatusBar.EmptyStatus(),
+                new StatusBar.VersionStatus(),
+                new StatusBar.LogoStatus(),
+            };
+
+            #endregion
 
             /* Run */
             Application.Run((MainForm)_mainForm);
@@ -94,6 +114,7 @@ namespace Konvolucio.MCEL181123
         private void IoService_Started(object sender, EventArgs e)
         {
             EventAggregator.Instance.Publish(new PlayAppEvent(_ioService));
+            TimerService.Instance.Start();
         }
 
         /// <summary>
@@ -102,6 +123,7 @@ namespace Konvolucio.MCEL181123
         private void IoService_Stopped(object sender, EventArgs e)
         {
             EventAggregator.Instance.Publish(new StopAppEvent(_ioService));
+            TimerService.Instance.Stop();
         }
 
 

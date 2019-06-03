@@ -15,6 +15,9 @@
         event EventHandler Stopped;
         event EventHandler Started;
         string GetDefaultDeviceName { get; }
+        int GetPendingFrames { get; }
+        int GetDroppedFrames { get; }
+        int GetParsedFrames { get; }
         void Play();
         void Stop();
     }
@@ -27,7 +30,11 @@
         public event EventHandler Started;
         public event EventHandler Reset;
 
+        public int GetPendingFrames { get; private set; }
+        public int GetDroppedFrames { get; private set; }
+        public int GetParsedFrames { get; private set; }
 
+        public DeviceExplorer Explorer; 
 
         string CanInterface = "CAN0";
         uint Baudrate = 500000;
@@ -38,10 +45,12 @@
         
         private bool _isRunning;
         private bool _disposed;
+        
         uint _handle = 0;
+
         public IoService()
         {
-            
+            Explorer = new DeviceExplorer();
         }
 
         /// <summary>
@@ -56,8 +65,6 @@
             EventAggregator.Instance.Publish(new PlayAppEvent(this));
             try
             {
-                _handle = NiCanOpen(CanInterface);
-
                 var th = new Thread(new ThreadStart(DoWork))
                 {
                     Name = "IoService",
@@ -102,10 +109,13 @@
         }
 
         /// <summary>
-        /// Ütemesen nézzük mi a helyzet az adapterrel
+        /// Ütemesen nézzük mi a helyzet a CAN-el
         /// </summary>
         private void DoWork()
         {
+            int status = 0;
+            var rxMsg = new NiCan.NCTYPE_CAN_STRUCT();
+            uint attrValue = 0;
             _isRunning = true;
             Exception loopException = null;
 
@@ -117,8 +127,68 @@
                 doMehtod();
             #endregion
 
+
+            _handle = NiCanOpen(CanInterface);
+
+
             do
             {
+
+                /*** Get NC_ATTR_READ_PENDING ***/
+               if((status = NiCan.ncGetAttribute(_handle, NiCan.NC_ATTR_READ_PENDING, 4, ref attrValue)) != 0)
+                {
+                    loopException = new NiCanIoException(status);
+                    break;
+                }
+                GetPendingFrames = (int)attrValue;
+
+
+               // Debug.WriteLine("Timestamp:" + rxMsg.TimeStamp.ToString("X"));
+
+                if (GetPendingFrames != 0)
+                {
+                    /*** Read ***/
+                    if ((status = NiCan.ncRead(_handle, NiCan.CanStructSize, ref rxMsg)) != 0)
+                    {
+                        loopException = new NiCanIoException(status);
+                        break;
+                    }
+                    if ((rxMsg.ArbitrationId & 0x20000000) == 0x20000000)
+                    { /*Message is Extended */
+                        /*Mask*/
+                        UInt32 arbId = rxMsg.ArbitrationId & 0x1FFFFFFF;
+
+                        byte[] datatemp = new byte[]
+                        {   rxMsg.Data0,
+                            rxMsg.Data1,
+                            rxMsg.Data2,
+                            rxMsg.Data3,
+                            rxMsg.Data4,
+                            rxMsg.Data5,
+                            rxMsg.Data6,
+                            rxMsg.Data7, };
+                        byte[] data = new byte[rxMsg.DataLength];
+                        Buffer.BlockCopy(datatemp, 0, data, 0, rxMsg.DataLength);
+                 
+                        LogService.Instance.WirteLine(arbId.ToString("X8") + " " + Common.ByteArrayLogString(data));
+
+                        if (Explorer.ParseFrame(arbId, data))
+                        {
+                            GetParsedFrames++;
+                        }
+                        else
+                        {   /*Device is Unknown*/
+                            GetDroppedFrames++;
+                        }
+                    }
+                    else
+                    {
+                        GetDroppedFrames++;
+                    }
+
+                }
+
+
                 if (_shutdownEvent.WaitOne(0))
                 {
                     Debug.WriteLine(GetType().Namespace + "." +
@@ -193,8 +263,9 @@
                  throw new NiCanIoException(status);
 
             /*** Start ***/
-            status = NiCan.ncAction(_handle, NiCan.NC_OP_START, 0);
-
+            status = NiCan.ncAction(handle, NiCan.NC_OP_START, 0);
+            if (status != 0)
+                throw new NiCanIoException(status);
             return handle;
         }
 
@@ -218,7 +289,7 @@
 
         #endregion
 
-
+        #region OnEvent
         private void OnStopped()
         {
             if (Stopped != null)
@@ -242,7 +313,9 @@
                 Reset(this, EventArgs.Empty);
             }
         }
+        #endregion
 
+        #region Disopse
         /// <summary>
         ///  Public implementation of Dispose pattern callable by consumers. 
         /// </summary>
@@ -285,5 +358,6 @@
             }
             _disposed = true;
         }
+        #endregion
     }
 }
