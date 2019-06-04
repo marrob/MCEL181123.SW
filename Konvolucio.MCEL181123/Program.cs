@@ -11,6 +11,7 @@ namespace Konvolucio.MCEL181123
     using System.Diagnostics;
     using Properties;
     using Events;
+    using View;
 
     static class Program
     {
@@ -35,19 +36,25 @@ namespace Konvolucio.MCEL181123
     {
         public static SynchronizationContext SyncContext = null;
 
-        IMainForm _mainForm = new MainForm();
-        IIoService _ioService = new IoService();
-
+        IMainForm _mainForm;
+        DeviceExplorer _explorer;
+        IIoService _ioService;
+        private readonly TreeNode _startTreeNode;
 
         public App()
         {
             /* Main Form */
+            _mainForm = new MainForm();
             _mainForm.Text = AppConstants.SoftwareTitle + " - " + Application.ProductVersion;
             _mainForm.Shown += MainForm_Shown;
             _mainForm.FormClosing += MainForm_FormClosing;
             _mainForm.FormClosed += new FormClosedEventHandler(MainForm_FormClosed);
 
+            /*Explorer*/
+            _explorer = new DeviceExplorer();
+
             /* IoService */
+            _ioService = new IoService(_explorer);
             _ioService.Started += IoService_Started;
             _ioService.Stopped += IoService_Stopped;
 
@@ -77,6 +84,7 @@ namespace Konvolucio.MCEL181123
                {
                      new Commands.PlayCommand(_ioService),
                      new Commands.StopCommand(_ioService),
+                     new Commands.ResetCommand()
                });
 
             _mainForm.MenuBar = new ToolStripItem[]
@@ -88,12 +96,34 @@ namespace Konvolucio.MCEL181123
                 };
             #endregion
 
+            #region Tree
+
+            _mainForm.Tree.Nodes.Add(
+             _startTreeNode = new View.TreeNodes.StatisticsTreeNode(
+                   new TreeNode[]
+                        {
+                            new View.TreeNodes.WaitForParseTreeNode(_ioService),
+                            new View.TreeNodes.DropFrameTreeNode(_ioService),
+                            new View.TreeNodes.ParsedFrameTreeNode(_ioService),
+                            new View.TreeNodes.RxFramesTreeNode(_ioService),
+                            new View.TreeNodes.RacksTreeNode(_explorer),
+                            new View.TreeNodes.ModulsTree(_explorer),
+                        }
+                    )
+                );
+
+            #endregion
+
+            #region DataGrid
+                _mainForm.DataGrid.DataSource = _explorer.Devices;
+            #endregion
+
             #region StatusBar
 
             /* StatusBar */
             _mainForm.StatusBar = new ToolStripItem[]
             {
-                new StatusBar.PendingFramesStatus(_ioService),
+                new StatusBar.WaitForParseFramesStatus(_ioService),
                 new StatusBar.ParsedFramesStatus(_ioService),
                 new StatusBar.DroppedFramesStatus(_ioService),
                 new StatusBar.EmptyStatus(),
@@ -148,6 +178,11 @@ namespace Konvolucio.MCEL181123
 #endif
 
             SyncContext = SynchronizationContext.Current;
+
+            /*Megnyitást követően rá áll az Adapter Nódra a TreeView-ban.*/
+            _mainForm.Tree.Nodes[0].ExpandAll();
+            _mainForm.Tree.SelectedNode = _startTreeNode;
+
             //_mainForm.LayoutRestore();
             /*Ö tölti be a projectet*/
             Start(Environment.GetCommandLineArgs());

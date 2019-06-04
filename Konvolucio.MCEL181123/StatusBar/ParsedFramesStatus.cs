@@ -14,9 +14,16 @@ namespace Konvolucio.MCEL181123.StatusBar
             BorderSides = ToolStripStatusLabelBorderSides.Left;
             BorderStyle = Border3DStyle.Etched;
             Size = new System.Drawing.Size(58, 19);
-            Text = "-";
+            Text = AppConstants.ValueNotAvailable2;
 
-            TimerService.Instance.Tick += (s, e) => { Text = "Parsed:" + ioService.GetParsedFrames.ToString() + " "; };
+            TimerService.Instance.Tick += (s, e) => 
+            {
+                if (_ioService.GetParsedFrames.HasValue)
+                    Text = "Parsed Frames" + @": " + _ioService.GetParsedFrames;
+                else
+                    Text = "Parsed Frames" + @": " + AppConstants.ValueNotAvailable2;
+
+            };
         }
     }
 }

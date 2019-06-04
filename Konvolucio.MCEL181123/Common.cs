@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Konvolucio.MCEL181123
+﻿namespace Konvolucio.MCEL181123
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.ComponentModel;
+    using System.Linq.Expressions;
+
     public static class Common
     {
         /// <summary>
@@ -24,6 +25,29 @@ namespace Konvolucio.MCEL181123
                 if (byteArray.Length > 1)
                     retval = retval.Remove(retval.Length - 1, 1);
             return (retval);
+        }
+
+        /// <summary>
+        /// Tulajdonság nevének megszerzése, még a tulajdonságban
+        /// Típikus haszánlata:
+        /// Minőségi szoftver estén használd!!!!
+        /// <code> 
+        /// set 
+        /// { 
+        ///     if (_year != value) 
+        ///     {
+        ///        _year = value; 
+        ///        OnPropertyChanged(GetPropertyName(() => Year)); 
+        ///     } 
+        /// }</code>
+        /// 
+        /// </summary>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="propertyId"></param>
+        /// <returns></returns>
+        public static String GetPropertyName<TValue>(Expression<Func<TValue>> propertyId)
+        {
+            return ((MemberExpression)propertyId.Body).Member.Name;
         }
     }
 }

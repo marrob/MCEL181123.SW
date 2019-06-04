@@ -11,30 +11,26 @@ namespace Konvolucio.MCEL181123
     using System.Threading.Tasks;
     using System.Windows.Forms;
 
+    
 
     public interface IMainForm
     {
+
+        event EventHandler Shown;
         event FormClosedEventHandler FormClosed;
         event FormClosingEventHandler FormClosing;
         event EventHandler Disposed;
 
-        event EventHandler Shown;
+        string Text { get; set; }
+        ToolStripItem[] MenuBar { set; }
+        TreeView Tree { get; }
+        DataGridView DataGrid { get; }
+        ToolStripItem[] StatusBar { set; }
+        bool AlwaysOnTop { get; set; }
+
+
         //event KeyEventHandler KeyUp;
         //event HelpEventHandler HelpRequested; /*????*/
-       
-
-        string Text { get; set; }
-        //string Status { get; set; }
-
-        //void ProgressBarUpdate(ProgressChangedEventArgs arg);
-        //void Close();
-
-        IMainViewControl MainView { get; }
-
-        ToolStripItem[] MenuBar { set; }
-        ToolStripItem[] StatusBar { set; }
-
-        bool AlwaysOnTop { get; set; }
 
         //void CursorWait();
         //void CursorDefault();
@@ -45,12 +41,14 @@ namespace Konvolucio.MCEL181123
     public partial class MainForm : Form, IMainForm
     {
 
-        public IMainViewControl MainView { get { return mainViewControl1; } }
-
         public ToolStripItem[] MenuBar
         {
             set { menuStrip1.Items.AddRange(value); }
         }
+
+        public TreeView Tree { get { return treeView1; } }
+
+        public DataGridView DataGrid { get { return dataGridView1; } }
 
         public ToolStripItem[] StatusBar
         {
@@ -67,6 +65,7 @@ namespace Konvolucio.MCEL181123
         {
             InitializeComponent();
         }
+
 
     }
 }

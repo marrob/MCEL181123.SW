@@ -1,6 +1,6 @@
-﻿namespace Konvolucio.MCEL181123
+﻿namespace Konvolucio.MCEL181123.View
 {
-    partial class MainViewControl
+    partial class SplitView
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,11 +29,14 @@
         private void InitializeComponent()
         {
             this.SuspendLayout();
-
+            // 
+            // SplitView
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "MainViewControl";
-            this.Size = new System.Drawing.Size(674, 303);
+            this.BackColor = System.Drawing.Color.Orange;
+            this.Name = "SplitView";
+            this.Size = new System.Drawing.Size(736, 358);
             this.ResumeLayout(false);
 
         }

@@ -8,11 +8,9 @@ namespace Konvolucio.MCEL181123.Events
 
     class ResetAppEvent : IApplicationEvent
     {
-        public IIoService _IoService;
-
-        public ResetAppEvent(IIoService ioService)
+        public ResetAppEvent()
         {
-            _IoService = ioService;
+
         }
 
         public override string ToString()

@@ -4,11 +4,11 @@ namespace Konvolucio.MCEL181123.StatusBar
 {
     using System.Windows.Forms;
 
-    class DroppedFramesStatus : ToolStripStatusLabel
+    class WaitForParseFramesStatus : ToolStripStatusLabel
     {
         private readonly IIoService _ioService;
 
-        public DroppedFramesStatus(IIoService ioService)
+        public WaitForParseFramesStatus(IIoService ioService)
         {
             _ioService = ioService;
             BorderSides = ToolStripStatusLabelBorderSides.Left;
@@ -16,12 +16,14 @@ namespace Konvolucio.MCEL181123.StatusBar
             Size = new System.Drawing.Size(58, 19);
             Text = AppConstants.ValueNotAvailable2;
 
+
             TimerService.Instance.Tick += (s, e) =>
             {
-                if (_ioService.GetDroppedFrames.HasValue)
-                    Text = "Dropped Frames" + @": " + _ioService.GetDroppedFrames;
+                if (_ioService.GeWaitForParseFrames.HasValue)
+                    Text = "Wait For Parse Frames" + @": " + _ioService.GeWaitForParseFrames;
                 else
-                    Text = "Dropped Frames" + @": " + AppConstants.ValueNotAvailable2;
+                    Text = "Wait For Parse Frames" + @": " + AppConstants.ValueNotAvailable2;
+
             };
         }
     }

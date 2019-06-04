@@ -63,6 +63,16 @@ namespace Konvolucio.MCEL181123.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap adapter {
+            get {
+                object obj = ResourceManager.GetObject("adapter", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap dictionary48 {
             get {
                 object obj = ResourceManager.GetObject("dictionary48", resourceCulture);

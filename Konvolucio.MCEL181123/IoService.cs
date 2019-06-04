@@ -15,9 +15,10 @@
         event EventHandler Stopped;
         event EventHandler Started;
         string GetDefaultDeviceName { get; }
-        int GetPendingFrames { get; }
-        int GetDroppedFrames { get; }
-        int GetParsedFrames { get; }
+        int? GeWaitForParseFrames { get; }
+        int? GetDroppedFrames { get; }
+        int? GetParsedFrames { get; }
+        int? GetRxFrames { get;  }
         void Play();
         void Stop();
     }
@@ -30,15 +31,16 @@
         public event EventHandler Started;
         public event EventHandler Reset;
 
-        public int GetPendingFrames { get; private set; }
-        public int GetDroppedFrames { get; private set; }
-        public int GetParsedFrames { get; private set; }
-
-        public DeviceExplorer Explorer; 
+        public int? GeWaitForParseFrames { get; private set; }
+        public int? GetDroppedFrames { get; private set; }
+        public int? GetParsedFrames { get; private set; }
+        public int? GetRxFrames { get; private set; }
 
         string CanInterface = "CAN0";
         uint Baudrate = 500000;
 
+
+        private DeviceExplorer _explorer;
 
         private AutoResetEvent _shutdownEvent = new AutoResetEvent(false);
         private AutoResetEvent _readyToDisposeEvent = new AutoResetEvent(false);
@@ -48,9 +50,9 @@
         
         uint _handle = 0;
 
-        public IoService()
+        public IoService(DeviceExplorer explorer)
         {
-            Explorer = new DeviceExplorer();
+            _explorer = explorer;
         }
 
         /// <summary>
@@ -130,7 +132,10 @@
 
             _handle = NiCanOpen(CanInterface);
 
-
+            GeWaitForParseFrames = 0;
+            GetDroppedFrames = 0;
+            GetParsedFrames = 0;
+            GetRxFrames = 0;
             do
             {
 
@@ -140,13 +145,14 @@
                     loopException = new NiCanIoException(status);
                     break;
                 }
-                GetPendingFrames = (int)attrValue;
+                GeWaitForParseFrames = (int)attrValue;
 
 
                // Debug.WriteLine("Timestamp:" + rxMsg.TimeStamp.ToString("X"));
 
-                if (GetPendingFrames != 0)
+                if (GeWaitForParseFrames != 0)
                 {
+                    GetRxFrames++;
                     /*** Read ***/
                     if ((status = NiCan.ncRead(_handle, NiCan.CanStructSize, ref rxMsg)) != 0)
                     {
@@ -172,14 +178,20 @@
                  
                         LogService.Instance.WirteLine(arbId.ToString("X8") + " " + Common.ByteArrayLogString(data));
 
-                        if (Explorer.ParseFrame(arbId, data))
+                        doMehtod = () =>
                         {
-                            GetParsedFrames++;
-                        }
+                            if (_explorer.ParseFrame(arbId, data))
+                                GetParsedFrames++;
+                            else
+                                GetDroppedFrames++;
+                           
+
+                          //  _explorer.Devices.ResetBindings();
+                        };
+                        if (App.SyncContext != null)
+                            App.SyncContext.Post((e1) => { doMehtod(); }, null);
                         else
-                        {   /*Device is Unknown*/
-                            GetDroppedFrames++;
-                        }
+                            doMehtod();
                     }
                     else
                     {
