@@ -12,10 +12,10 @@ namespace Konvolucio.MCEL181123.View.TreeNodes
 
     internal sealed class ModulsTree : TreeNode
     {
-        private readonly DeviceExplorer _explorer;
+        private readonly Explorer _explorer;
 
 
-        public ModulsTree(DeviceExplorer explorer)
+        public ModulsTree(Explorer explorer)
         {
             _explorer = explorer;
             Text = "Moduls" + @": " + AppConstants.ValueNotAvailable2;
@@ -39,7 +39,7 @@ namespace Konvolucio.MCEL181123.View.TreeNodes
 
             void Timer_Tick(object sender, EventArgs e)
             {
-                   Text = "Moduls" + @": " + _explorer.Devices.Select(n=>n.DeviceAddress).Distinct().Count();
+                   Text = "Moduls" + @": " + _explorer.Devices.Select(n=>n.Address).Distinct().Count();
 
             }
         }

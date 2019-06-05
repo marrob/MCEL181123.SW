@@ -12,13 +12,14 @@ namespace Konvolucio.MCEL181123.View.TreeNodes
 
     internal sealed class RacksTreeNode : TreeNode
     {
-        private readonly DeviceExplorer _explorer;
+        private readonly Explorer _explorer;
 
 
-        public RacksTreeNode(DeviceExplorer explorer)
+        public RacksTreeNode(Explorer explorer)
         {
             _explorer = explorer;
             Text = "Racks" + @": " + AppConstants.ValueNotAvailable2;
+            ToolTipText = "Ennyi darab rack található a buszon, ez az elérhető rack címek alapján határozom meg.";
 
             TimerService.Instance.Tick += new EventHandler(Timer_Tick);
 
@@ -40,7 +41,6 @@ namespace Konvolucio.MCEL181123.View.TreeNodes
             void Timer_Tick(object sender, EventArgs e)
             {
                    Text = "Racks" + @": " + _explorer.Devices.Select(n=>n.Rack).Distinct().Count();
-
             }
         }
     }

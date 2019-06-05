@@ -37,7 +37,7 @@ namespace Konvolucio.MCEL181123
         public static SynchronizationContext SyncContext = null;
 
         IMainForm _mainForm;
-        DeviceExplorer _explorer;
+        Explorer _explorer;
         IIoService _ioService;
         private readonly TreeNode _startTreeNode;
 
@@ -51,7 +51,7 @@ namespace Konvolucio.MCEL181123
             _mainForm.FormClosed += new FormClosedEventHandler(MainForm_FormClosed);
 
             /*Explorer*/
-            _explorer = new DeviceExplorer();
+            _explorer = new Explorer();
 
             /* IoService */
             _ioService = new IoService(_explorer);
@@ -98,24 +98,36 @@ namespace Konvolucio.MCEL181123
 
             #region Tree
 
-            _mainForm.Tree.Nodes.Add(
-             _startTreeNode = new View.TreeNodes.StatisticsTreeNode(
-                   new TreeNode[]
-                        {
-                            new View.TreeNodes.WaitForParseTreeNode(_ioService),
-                            new View.TreeNodes.DropFrameTreeNode(_ioService),
-                            new View.TreeNodes.ParsedFrameTreeNode(_ioService),
-                            new View.TreeNodes.RxFramesTreeNode(_ioService),
-                            new View.TreeNodes.RacksTreeNode(_explorer),
-                            new View.TreeNodes.ModulsTree(_explorer),
-                        }
-                    )
-                );
-
+            //_mainForm.Tree.Nodes.Add(
+            // _startTreeNode = new View.TreeNodes.StatisticsTreeNode(
+            //       new TreeNode[]
+            //            {
+            //                new View.TreeNodes.WaitForParseTreeNode(_ioService),
+            //                new View.TreeNodes.DropFrameTreeNode(_ioService),
+            //                new View.TreeNodes.ParsedFrameTreeNode(_ioService),
+            //                new View.TreeNodes.RxFramesTreeNode(_ioService),
+            //                new View.TreeNodes.RacksTreeNode(_explorer),
+            //                new View.TreeNodes.ModulsTree(_explorer),
+            //            }
+            //        )
+            //    );
+            _mainForm.Tree.Nodes.AddRange(
+                new TreeNode[]
+                    {
+                        new View.TreeNodes.RacksTreeNode(_explorer),
+                        new View.TreeNodes.ModulsTree(_explorer),
+                        new View.TreeNodes.WaitForParseTreeNode(_ioService),
+                        new View.TreeNodes.DropFrameTreeNode(_ioService),
+                        new View.TreeNodes.ParsedFrameTreeNode(_ioService),
+                        new View.TreeNodes.RxFramesTreeNode(_ioService),
+                        new View.TreeNodes.TxFramesTreeNode(_ioService),
+                        new View.TreeNodes.WaitForTxTreeNode(_ioService)
+                    });                 
+              
             #endregion
 
             #region DataGrid
-                _mainForm.DataGrid.DataSource = _explorer.Devices;
+            _mainForm.DataGrid.DataSource = _explorer.Devices;
             #endregion
 
             #region StatusBar

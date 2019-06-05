@@ -1,8 +1,11 @@
 ﻿namespace Konvolucio.MCEL181123
 {
+    using System;
+
     public interface IDevice
     {
-        int DeviceAddress { get; }
+        byte Address { get; }
         void Update(byte msgId, byte[] data);
+        DateTime LastRx { get; }
     }
 }

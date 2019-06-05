@@ -66,6 +66,9 @@ namespace Konvolucio.MCEL181123
             InitializeComponent();
         }
 
+        private void powerControl1_Load(object sender, EventArgs e)
+        {
 
+        }
     }
 }

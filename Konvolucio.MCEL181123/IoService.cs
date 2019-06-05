@@ -9,16 +9,19 @@
     using System.Reflection;
     using Events;
     using System.Threading;
+    using Common;
 
     public interface IIoService : IDisposable
     {
         event EventHandler Stopped;
         event EventHandler Started;
         string GetDefaultDeviceName { get; }
-        int? GeWaitForParseFrames { get; }
+        int? GetWaitForParseFrames { get; }
         int? GetDroppedFrames { get; }
         int? GetParsedFrames { get; }
         int? GetRxFrames { get;  }
+        int? GetTxFrames { get; }
+        int? GetWaitForTxFrames { get; }
         void Play();
         void Stop();
     }
@@ -31,16 +34,18 @@
         public event EventHandler Started;
         public event EventHandler Reset;
 
-        public int? GeWaitForParseFrames { get; private set; }
+        public int? GetWaitForParseFrames { get; private set; }
         public int? GetDroppedFrames { get; private set; }
         public int? GetParsedFrames { get; private set; }
         public int? GetRxFrames { get; private set; }
+        public int? GetTxFrames { get; private set; }
+        public int? GetWaitForTxFrames { get; private set; }
 
         string CanInterface = "CAN0";
         uint Baudrate = 500000;
 
 
-        private DeviceExplorer _explorer;
+        private Explorer _explorer;
 
         private AutoResetEvent _shutdownEvent = new AutoResetEvent(false);
         private AutoResetEvent _readyToDisposeEvent = new AutoResetEvent(false);
@@ -50,7 +55,11 @@
         
         uint _handle = 0;
 
-        public IoService(DeviceExplorer explorer)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="explorer"></param>
+        public IoService(Explorer explorer)
         {
             _explorer = explorer;
         }
@@ -69,6 +78,7 @@
             {
                 var th = new Thread(new ThreadStart(DoWork))
                 {
+                    Priority = ThreadPriority.Normal,
                     Name = "IoService",
                 };
                 th.Start();
@@ -116,7 +126,8 @@
         private void DoWork()
         {
             int status = 0;
-            var rxMsg = new NiCan.NCTYPE_CAN_STRUCT();
+
+
             uint attrValue = 0;
             _isRunning = true;
             Exception loopException = null;
@@ -129,69 +140,93 @@
                 doMehtod();
             #endregion
 
-
             _handle = NiCanOpen(CanInterface);
 
-            GeWaitForParseFrames = 0;
+            GetWaitForParseFrames = 0;
             GetDroppedFrames = 0;
             GetParsedFrames = 0;
             GetRxFrames = 0;
+            GetTxFrames = 0;
+            GetWaitForTxFrames = 0;
             do
             {
+                var rx = new NiCan.NCTYPE_CAN_STRUCT();
 
                 /*** Get NC_ATTR_READ_PENDING ***/
-               if((status = NiCan.ncGetAttribute(_handle, NiCan.NC_ATTR_READ_PENDING, 4, ref attrValue)) != 0)
+                if ((status = NiCan.ncGetAttribute(_handle, NiCan.NC_ATTR_READ_PENDING, 4, ref attrValue)) != 0)
                 {
                     loopException = new NiCanIoException(status);
                     break;
                 }
-                GeWaitForParseFrames = (int)attrValue;
+                GetWaitForParseFrames = (int)attrValue;
 
-
-               // Debug.WriteLine("Timestamp:" + rxMsg.TimeStamp.ToString("X"));
-
-                if (GeWaitForParseFrames != 0)
+                if (GetWaitForParseFrames != 0)
                 {
                     GetRxFrames++;
                     /*** Read ***/
-                    if ((status = NiCan.ncRead(_handle, NiCan.CanStructSize, ref rxMsg)) != 0)
+                    if ((status = NiCan.ncRead(_handle, NiCan.CanStructSize, ref rx)) != 0)
                     {
                         loopException = new NiCanIoException(status);
                         break;
                     }
-                    if ((rxMsg.ArbitrationId & 0x20000000) == 0x20000000)
+                    if ((rx.ArbitrationId & 0x20000000) == 0x20000000)
                     { /*Message is Extended */
                         /*Mask*/
-                        UInt32 arbId = rxMsg.ArbitrationId & 0x1FFFFFFF;
+                        UInt32 arbId = rx.ArbitrationId & 0x1FFFFFFF;
 
                         byte[] datatemp = new byte[]
-                        {   rxMsg.Data0,
-                            rxMsg.Data1,
-                            rxMsg.Data2,
-                            rxMsg.Data3,
-                            rxMsg.Data4,
-                            rxMsg.Data5,
-                            rxMsg.Data6,
-                            rxMsg.Data7, };
-                        byte[] data = new byte[rxMsg.DataLength];
-                        Buffer.BlockCopy(datatemp, 0, data, 0, rxMsg.DataLength);
+                        {   rx.Data0,
+                            rx.Data1,
+                            rx.Data2,
+                            rx.Data3,
+                            rx.Data4,
+                            rx.Data5,
+                            rx.Data6,
+                            rx.Data7, };
+                        byte[] data = new byte[rx.DataLength];
+
+                        Buffer.BlockCopy(datatemp, 0, data, 0, rx.DataLength);
                  
-                        LogService.Instance.WirteLine(arbId.ToString("X8") + " " + Common.ByteArrayLogString(data));
+                        LogService.Instance.WirteLine(arbId.ToString("X8") + " " + Tools.ByteArrayLogString(data));
 
                         doMehtod = () =>
                         {
-                            if (_explorer.ParseFrame(arbId, data))
+                            if (_explorer.UpdateTask(new CanMsg(arbId, data)))
                                 GetParsedFrames++;
                             else
-                                GetDroppedFrames++;
-                           
-
-                          //  _explorer.Devices.ResetBindings();
+                                GetDroppedFrames++;                          
                         };
                         if (App.SyncContext != null)
                             App.SyncContext.Post((e1) => { doMehtod(); }, null);
                         else
                             doMehtod();
+
+
+                        /*** Write ***/
+                        if ((GetWaitForTxFrames = _explorer.TxQueue.Count) != 0)
+                        {
+                            var tx = _explorer.TxQueue.Dequeue();
+                            var niTx = new NiCan.NCTYPE_CAN_FRAME();
+
+                            niTx.ArbitrationId = tx.ArbId;
+                            niTx.IsRemote = NiCan.NC_FALSE;
+                            niTx.Data0 = tx.Data[0];
+                            niTx.Data1 = tx.Data[1];
+                            niTx.Data2 = tx.Data[2];
+                            niTx.Data3 = tx.Data[3];
+                            niTx.Data4 = tx.Data[4];
+                            niTx.Data5 = tx.Data[5];
+                            niTx.Data6 = tx.Data[6];
+                            niTx.Data7 = tx.Data[7];
+
+                            if ((status = NiCan.ncWrite(_handle, NiCan.CanFrameSize, ref niTx)) != 0)
+                            {
+                                loopException = new NiCanIoException(status);
+                                break;
+                            }
+
+                            GetTxFrames++;
+                        }
                     }
                     else
                     {

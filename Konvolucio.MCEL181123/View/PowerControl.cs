@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace Konvolucio.MCEL181123.View
 {
-    public partial class SplitView : UserControl
+    public partial class PowerControl : UserControl
     {
-        public SplitView()
+        public PowerControl()
         {
             InitializeComponent();
+        }
+
+        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

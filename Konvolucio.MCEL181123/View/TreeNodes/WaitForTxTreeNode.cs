@@ -10,15 +10,15 @@ namespace Konvolucio.MCEL181123.View.TreeNodes
     using System.Windows.Forms;
     using Events;
 
-    internal sealed class WaitForParseTreeNode : TreeNode
+    internal sealed class WaitForTxTreeNode : TreeNode
     {
         private readonly IIoService _ioService;
 
 
-        public WaitForParseTreeNode(IIoService ioService)
+        public WaitForTxTreeNode(IIoService ioService)
         {
             _ioService = ioService;
-            Text = "Wait For Parse"+ @": " + AppConstants.ValueNotAvailable2;
+            Text = "Wait For Tx" + @": " + AppConstants.ValueNotAvailable2;
 
             TimerService.Instance.Tick += new EventHandler(Timer_Tick);
 
@@ -40,9 +40,9 @@ namespace Konvolucio.MCEL181123.View.TreeNodes
             void Timer_Tick(object sender, EventArgs e)
             {
                 if(_ioService.GetWaitForParseFrames.HasValue)
-                   Text = "Wait For Parse" + @": " + _ioService.GetWaitForParseFrames;
+                   Text = "Wait For Tx" + @": " + _ioService.GetWaitForParseFrames;
                 else
-                   Text = "Wait For Parse" + @": " + AppConstants.ValueNotAvailable2;
+                   Text = "Wait For Tx" + @": " + AppConstants.ValueNotAvailable2;
             }
         }
     }

@@ -9,6 +9,7 @@ namespace Konvolucio.MCEL181123
     using NUnit.Framework;
     using System.Diagnostics;
     using System.Text;
+    using Common;
 
     [TestFixture]
     class UintTest
@@ -16,10 +17,10 @@ namespace Konvolucio.MCEL181123
         [Test]
         public void first()
         {
-            var de = new DeviceExplorer();
+            var de = new Explorer();
 
-            de.ParseFrame(0x00000100, new byte[] { 0x00, 0x01 });
-            de.ParseFrame(0x00000100, new byte[] { 0x00, 0x01 });
+            de.UpdateTask(new CanMsg(0x00000100, new byte[] { 0x00, 0x01 }));
+            de.UpdateTask(new CanMsg(0x00000100, new byte[] { 0x00, 0x01 }));
         }
     }
 }

@@ -78,8 +78,13 @@
     <Compile Include="Commands\StopCommand.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Common.cs" />
-    <Compile Include="DeviceExplorer.cs" />
+    <Compile Include="Common\CanMsg.cs" />
+    <Compile Include="Common\SafeQueue.cs" />
+    <Compile Include="Common\Tools.cs" />
+    <Compile Include="Controls\KnvDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Explorer.cs" />
     <Compile Include="Events\EventAggregator.cs" />
     <Compile Include="Events\ResetAppEvent .cs" />
     <Compile Include="Events\PlayAppEvent.cs" />
@@ -87,7 +92,7 @@
     <Compile Include="Events\UnitTest_EventAggregator.cs" />
     <Compile Include="IDevice.cs" />
     <Compile Include="LogService.cs" />
-    <Compile Include="MCEL\MCEL181123Device.cs" />
+    <Compile Include="MCEL\MCEL181123DeviceItem.cs" />
     <Compile Include="MCEL\MCEL181123DeviceCollection.cs" />
     <Compile Include="MCEL\UintTest.cs" />
     <Compile Include="NiCan\NiCan.cs" />
@@ -118,8 +123,10 @@
     <Compile Include="TimerService.cs" />
     <Compile Include="View\TreeNodes\ModulsTreeNode.cs" />
     <Compile Include="View\TreeNodes\RacksTreeNode.cs" />
+    <Compile Include="View\TreeNodes\TxFramesTreeNode.cs" />
     <Compile Include="View\TreeNodes\RxFramesTreeNode.cs" />
     <Compile Include="View\TreeNodes\ParsedFrameTreeNode.cs" />
+    <Compile Include="View\TreeNodes\WaitForTxTreeNode.cs" />
     <Compile Include="View\TreeNodes\WaitForParseTreeNode.cs" />
     <Compile Include="View\TreeNodes\DropFrameTreeNode.cs" />
     <Compile Include="View\HowIsWorkingForm.cs">
@@ -135,17 +142,17 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="View\TreeNodes\StatisticsTreeNode.cs" />
-    <Compile Include="View\SplitView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="View\SplitView.Designer.cs">
-      <DependentUpon>SplitView.cs</DependentUpon>
-    </Compile>
     <Compile Include="View\UpdatesForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\UpdatesForm.Designer.cs">
       <DependentUpon>UpdatesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\PowerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\PowerControl.Designer.cs">
+      <DependentUpon>PowerControl.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -164,8 +171,8 @@
     <EmbeddedResource Include="View\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\SplitView.resx">
-      <DependentUpon>SplitView.cs</DependentUpon>
+    <EmbeddedResource Include="View\PowerControl.resx">
+      <DependentUpon>PowerControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\UpdatesForm.resx">
       <DependentUpon>UpdatesForm.cs</DependentUpon>

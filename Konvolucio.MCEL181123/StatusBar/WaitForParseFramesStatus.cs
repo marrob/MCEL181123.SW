@@ -19,8 +19,8 @@ namespace Konvolucio.MCEL181123.StatusBar
 
             TimerService.Instance.Tick += (s, e) =>
             {
-                if (_ioService.GeWaitForParseFrames.HasValue)
-                    Text = "Wait For Parse Frames" + @": " + _ioService.GeWaitForParseFrames;
+                if (_ioService.GetWaitForParseFrames.HasValue)
+                    Text = "Wait For Parse Frames" + @": " + _ioService.GetWaitForParseFrames;
                 else
                     Text = "Wait For Parse Frames" + @": " + AppConstants.ValueNotAvailable2;
 
