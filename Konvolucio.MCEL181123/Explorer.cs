@@ -5,11 +5,9 @@ namespace Konvolucio.MCEL181123
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.ComponentModel;
     using Common;
     using Devices;
+    using CanDatabase;
 
     public class Explorer
     {
@@ -24,19 +22,19 @@ namespace Konvolucio.MCEL181123
 
         public bool UpdateTask(CanMsg msg)
         {
-             /*DeviceType is MCEL*/
-            if ((msg.ArbId & 0x0F000000) == MCEL181123DeviceCollection.TpyeCode << 24)
-            {
-                byte address = (byte)((msg.ArbId & 0x00FF0000) >> 16);
-                byte msgType = (byte)((msg.ArbId & 0x0000FF00) >> 8);
 
-                if ((Devices.FirstOrDefault(n => n.Address == address)) is IDevice item)
+            if (CanDb.GetNodeId(msg.ArbId) == CanDb.Instance.Nodes.FirstOrDefault(n => n.Name == "MCEL181123").Id)
+            {
+                byte node = CanDb.GetNodeAddress(msg.ArbId);
+                byte msgId = CanDb.GetMsgId(msg.ArbId);
+
+                if (Devices.FirstOrDefault(n => n.Address == node) is IDevice item)
                 {
-                    item.Update(msgType, msg.Data);
+                    item.Update(msgId, msg.Data);
                 }
                 else
                 {
-                    Devices.Add(new MCEL181123DeviceItem(address, msgType, msg.Data));
+                    Devices.Add(new MCEL181123DeviceItem(node, msgId, msg.Data));
                 }
                 return true;
             }

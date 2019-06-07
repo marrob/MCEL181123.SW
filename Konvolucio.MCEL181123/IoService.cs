@@ -10,13 +10,12 @@
     using Events;
     using System.Threading;
     using Common;
-    using Signals;
-    using Devices;
 
     public interface IIoService : IDisposable
     {
         event EventHandler Stopped;
         event EventHandler Started;
+        SafeQueue<CanMsg> TxQueue { get; }
         string GetDefaultDeviceName { get; }
         int? GetWaitForParseFrames { get; }
         int? GetDroppedFrames { get; }
@@ -26,7 +25,6 @@
         int? GetWaitForTxFrames { get; }
         void Play();
         void Stop();
-        void Send(SignalItem signal, string value, bool broadcast, byte address);
     }
 
     class IoService : IIoService
@@ -53,7 +51,7 @@
         private AutoResetEvent _shutdownEvent = new AutoResetEvent(false);
         private AutoResetEvent _readyToDisposeEvent = new AutoResetEvent(false);
 
-        public SafeQueue<CanMsg> TxQueue;
+        public SafeQueue<CanMsg> TxQueue { get; } = new SafeQueue<CanMsg>();
 
         private bool _isRunning;
         private bool _disposed;
@@ -67,7 +65,6 @@
         public IoService(Explorer explorer)
         {
             _explorer = explorer;
-            TxQueue = new SafeQueue<CanMsg>();
         }
 
         /// <summary>
@@ -289,35 +286,6 @@
             else
                 doMehtod();
             #endregion
-        }
-
-
-        /// <summary>
-        /// Egy signal küldése
-        /// </summary>
-        public void Send(SignalItem signal, string value, bool broadcast, byte address)
-        {
-            uint arbId = (uint)(MCEL181123DeviceCollection.TpyeCode << 24 | address << 16 | signal.FrameId << 8);
-            if (broadcast)
-                arbId |= 0x1;
-
-            switch (signal.Type.ToUpper().Trim())
-            {
-                case "UNSIGNED":
-                    {
-                        UInt64 tval;
-                        UInt64.TryParse(value, out tval);
-                        tval <<= signal.StartBit;
-
-
-                        break;
-                    }
-                case "FLOAT":
-                    {
-
-                        break;
-                    }
-            }
         }
 
         #region NiCan

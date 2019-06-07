@@ -11,8 +11,8 @@ namespace Konvolucio.MCEL181123
     using System.Diagnostics;
     using Properties;
     using Events;
-    using Signals;
-    using View;
+    using CanDatabase;
+
 
     static class Program
     {
@@ -41,12 +41,13 @@ namespace Konvolucio.MCEL181123
         IMainForm _mainForm;
         Explorer _explorer;
         IIoService _ioService;
-        SiganlDictinary _dictinary;
 
         private readonly TreeNode _startTreeNode;
 
         public App()
         {
+
+            
             /*** Main Form ***/
             _mainForm = new MainForm();
             _mainForm.Text = AppConstants.SoftwareTitle + " - " + Application.ProductVersion;
@@ -61,9 +62,6 @@ namespace Konvolucio.MCEL181123
             _ioService = new IoService(_explorer);
             _ioService.Started += IoService_Started;
             _ioService.Stopped += IoService_Stopped;
-
-            /*** SiganlDictinary ***/
-            _dictinary = new SiganlDictinary();
 
             /*** TimerService ***/
             TimerService.Instance.Interval = 1000;
@@ -106,20 +104,23 @@ namespace Konvolucio.MCEL181123
             #region SendView
 
             var sendView = _mainForm.SendView;
-            sendView.Signals = _dictinary.Signals.Select(n => n.Name).ToArray();
+            sendView.Signals = CanDb.Instance.Signals.Where(n => n.Message.Node.Name == NodeCollection.NODE_PC ).Select(n=>n.Name).ToArray();
             sendView.SelectedSignalChanged += (o, s) =>
             {
-                sendView.Value = _dictinary.Signals.FirstOrDefault(n => n.Name == sendView.SelectedSignal).Value;
+                sendView.Value = CanDb.Instance.Signals.FirstOrDefault(n => n.Name == sendView.SelectedSignal).DefaultValue;
             };
             sendView.Send += (o, s) =>
             {
-                _ioService.Send
+              var msg = CanDb.MakeMessage
                 (
-                    _dictinary.Signals.FirstOrDefault(n => n.Name == sendView.SelectedSignal),
-                    sendView.Value,
-                    sendView.Broadcast,
-                    sendView.Address
+                    nodeId: 0x05,
+                    signal: CanDb.Instance.Signals.FirstOrDefault(n => n.Name == sendView.SelectedSignal),
+                    value: sendView.Value,
+                    broadcast: sendView.Broadcast,
+                    devId: sendView.Address
                 );
+
+                _ioService.TxQueue.Enqueue(msg);
             };
             #endregion
 

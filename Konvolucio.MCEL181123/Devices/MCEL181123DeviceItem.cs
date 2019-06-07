@@ -5,15 +5,12 @@ namespace Konvolucio.MCEL181123.Devices
     using System.ComponentModel;
     using Common;
     using System.Collections;
+    using CanDatabase;
+    using System.Linq;
 
     public class MCEL181123DeviceItem : IDevice, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
-        const byte MSGTYPE_MCEL_LIVE = 0xFF;
-        const byte MSGTPYE_MCEL_MONITOR = 0x01;
-
-        public const byte MSGTYPE_CVSET = 0x02;
 
         public byte Address { get; private set; }
 
@@ -52,33 +49,44 @@ namespace Konvolucio.MCEL181123.Devices
 
         public void Update(byte msgId, byte[] data)
         {
-            LastRx = DateTime.Now;
+            //LastRx = DateTime.Now;
 
-            switch (msgId)
-            {
-                case MSGTYPE_MCEL_LIVE:
-                    {
-                        UpTime = BitConverter.ToInt64(data, 0);
-                        OnProppertyChanged(Tools.GetPropertyName(() => UpTime));
-                        break;
-                    }
+            //var signal = CanDb.Instance.GetSignal(CanDb.Instance.Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL), msgId);
+            
+            //if (signal.Name == SignalCollection.)
+            //if (CanDb.Instance.Messages.FirstOrDefault(n => n.Name == MessageCollection.MSG_MCEL_LIVE).Id == msgId)
+            //{
+            //    OnProppertyChanged(Tools.GetPropertyName(() => UpTime));
+            //}
 
-                case MSGTPYE_MCEL_MONITOR:
-                    {   
-                        VMon = BitConverter.ToSingle(data, 0);
-                        OnProppertyChanged(Tools.GetPropertyName(() => VMon));
-                        CMon = BitConverter.ToSingle(data, 4);
-                        OnProppertyChanged(Tools.GetPropertyName(() => CMon));
-                        break;
-                    }
+            //switch (msgId)
+            //{
+            //    case MSGTYPE_MCEL_LIVE:
+            //        {
 
-                default:
-                    {
-                        break;
-                    };
+            //           // CanDb.Instance.Messages.FirstOrDefault(n=>n.Name == "").
+
+            //            UpTime = BitConverter.ToInt64(data, 0);
+                        
+            //            break;
+            //        }
+
+            //    case MSGTPYE_MCEL_MONITOR:
+            //        {   
+            //            VMon = BitConverter.ToSingle(data, 0);
+            //            OnProppertyChanged(Tools.GetPropertyName(() => VMon));
+            //            CMon = BitConverter.ToSingle(data, 4);
+            //            OnProppertyChanged(Tools.GetPropertyName(() => CMon));
+            //            break;
+            //        }
+
+            //    default:
+            //        {
+            //            break;
+            //        };
 
                
-            }
+           // }
         }
 
         /// <summary>
