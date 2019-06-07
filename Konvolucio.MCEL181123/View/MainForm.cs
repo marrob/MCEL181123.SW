@@ -10,8 +10,9 @@ namespace Konvolucio.MCEL181123
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Forms;
+    using View;
 
-    
+
 
     public interface IMainForm
     {
@@ -23,6 +24,7 @@ namespace Konvolucio.MCEL181123
 
         string Text { get; set; }
         ToolStripItem[] MenuBar { set; }
+        ISignalSendView SendView {get;}
         TreeView Tree { get; }
         DataGridView DataGrid { get; }
         ToolStripItem[] StatusBar { set; }
@@ -40,11 +42,12 @@ namespace Konvolucio.MCEL181123
 
     public partial class MainForm : Form, IMainForm
     {
-
         public ToolStripItem[] MenuBar
         {
             set { menuStrip1.Items.AddRange(value); }
         }
+
+        public ISignalSendView SendView { get => signalSendViewControl1; }
 
         public TreeView Tree { get { return treeView1; } }
 

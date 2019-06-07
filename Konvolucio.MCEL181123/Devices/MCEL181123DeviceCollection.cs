@@ -1,5 +1,5 @@
 ﻿
-namespace Konvolucio.MCEL181123.MCEL
+namespace Konvolucio.MCEL181123.Devices
 {
     using System;
     using System.Collections.Generic;
@@ -10,6 +10,8 @@ namespace Konvolucio.MCEL181123.MCEL
 
     public class MCEL181123DeviceCollection : BindingList<MCEL181123DeviceItem>
     {
+
+        public static byte TpyeCode = 0x05;
 
         /// <summary>
         /// Egy Tool tábla beszúrása a listába.

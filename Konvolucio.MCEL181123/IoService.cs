@@ -10,6 +10,8 @@
     using Events;
     using System.Threading;
     using Common;
+    using Signals;
+    using Devices;
 
     public interface IIoService : IDisposable
     {
@@ -24,6 +26,7 @@
         int? GetWaitForTxFrames { get; }
         void Play();
         void Stop();
+        void Send(SignalItem signal, string value, bool broadcast, byte address);
     }
 
     class IoService : IIoService
@@ -49,10 +52,12 @@
 
         private AutoResetEvent _shutdownEvent = new AutoResetEvent(false);
         private AutoResetEvent _readyToDisposeEvent = new AutoResetEvent(false);
-        
+
+        public SafeQueue<CanMsg> TxQueue;
+
         private bool _isRunning;
         private bool _disposed;
-        
+
         uint _handle = 0;
 
         /// <summary>
@@ -62,6 +67,7 @@
         public IoService(Explorer explorer)
         {
             _explorer = explorer;
+            TxQueue = new SafeQueue<CanMsg>();
         }
 
         /// <summary>
@@ -70,7 +76,7 @@
         public void Play()
         {
             Debug.WriteLine(GetType().Namespace + "." + GetType().Name + "." + MethodBase.GetCurrentMethod().Name + "()");
-           
+
             _shutdownEvent = new AutoResetEvent(false);
             _readyToDisposeEvent = new AutoResetEvent(false);
             EventAggregator.Instance.Publish(new PlayAppEvent(this));
@@ -90,32 +96,31 @@
             }
         }
 
-
         /// <summary>
         /// Stop
         /// </summary>
         public void Stop()
         {
-            Debug.WriteLine(GetType().Namespace + "."+ 
+            Debug.WriteLine(GetType().Namespace + "." +
                             GetType().Name + "." +
                             MethodBase.GetCurrentMethod().Name + "()");
 
             if (_shutdownEvent != null)
             {
                 Debug.WriteLine(GetType().Namespace + "." +
-                                GetType().Name + "." + 
-                                MethodBase.GetCurrentMethod().Name + 
+                                GetType().Name + "." +
+                                MethodBase.GetCurrentMethod().Name +
                                 "(): Stop is pending.");
                 /*Break Thread*/
                 _shutdownEvent.Set();
             }
 
-                /*Waiting for resources free*/
+            /*Waiting for resources free*/
             if (_readyToDisposeEvent.WaitOne(5000))
             {
-                Debug.WriteLine(GetType().Namespace + "." + 
-                                GetType().Name + "." + 
-                                MethodBase.GetCurrentMethod().Name + 
+                Debug.WriteLine(GetType().Namespace + "." +
+                                GetType().Name + "." +
+                                MethodBase.GetCurrentMethod().Name +
                                 "(): Stop is ready.");
             }
         }
@@ -186,7 +191,7 @@
                         byte[] data = new byte[rx.DataLength];
 
                         Buffer.BlockCopy(datatemp, 0, data, 0, rx.DataLength);
-                 
+
                         LogService.Instance.WirteLine(arbId.ToString("X8") + " " + Tools.ByteArrayLogString(data));
 
                         doMehtod = () =>
@@ -194,7 +199,7 @@
                             if (_explorer.UpdateTask(new CanMsg(arbId, data)))
                                 GetParsedFrames++;
                             else
-                                GetDroppedFrames++;                          
+                                GetDroppedFrames++;
                         };
                         if (App.SyncContext != null)
                             App.SyncContext.Post((e1) => { doMehtod(); }, null);
@@ -203,9 +208,9 @@
 
 
                         /*** Write ***/
-                        if ((GetWaitForTxFrames = _explorer.TxQueue.Count) != 0)
+                        if ((GetWaitForTxFrames = TxQueue.Count) != 0)
                         {
-                            var tx = _explorer.TxQueue.Dequeue();
+                            var tx = TxQueue.Dequeue();
                             var niTx = new NiCan.NCTYPE_CAN_FRAME();
 
                             niTx.ArbitrationId = tx.ArbId;
@@ -239,14 +244,14 @@
                 if (_shutdownEvent.WaitOne(0))
                 {
                     Debug.WriteLine(GetType().Namespace + "." +
-                                    GetType().Name + "." + 
-                                    MethodBase.GetCurrentMethod().Name + 
+                                    GetType().Name + "." +
+                                    MethodBase.GetCurrentMethod().Name +
                                     "(): DoWork is now shutdown!");
                     break;
                 }
 
             } while (true);
-            
+
             /*Probléma megjelnítése*/
             if (loopException != null)
                 throw loopException;
@@ -284,6 +289,35 @@
             else
                 doMehtod();
             #endregion
+        }
+
+
+        /// <summary>
+        /// Egy signal küldése
+        /// </summary>
+        public void Send(SignalItem signal, string value, bool broadcast, byte address)
+        {
+            uint arbId = (uint)(MCEL181123DeviceCollection.TpyeCode << 24 | address << 16 | signal.FrameId << 8);
+            if (broadcast)
+                arbId |= 0x1;
+
+            switch (signal.Type.ToUpper().Trim())
+            {
+                case "UNSIGNED":
+                    {
+                        UInt64 tval;
+                        UInt64.TryParse(value, out tval);
+                        tval <<= signal.StartBit;
+
+
+                        break;
+                    }
+                case "FLOAT":
+                    {
+
+                        break;
+                    }
+            }
         }
 
         #region NiCan

@@ -40,7 +40,7 @@
             this.columnModul = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnVMon = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.coulmnCMon = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.powerControl1 = new Konvolucio.MCEL181123.View.PowerControl();
+            this.signalSendViewControl1 = new Konvolucio.MCEL181123.View.SignalSendViewControl();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -118,7 +118,7 @@
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.dataGridView1, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.powerControl1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.signalSendViewControl1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -182,11 +182,11 @@
             // 
             // powerControl1
             // 
-            this.powerControl1.Location = new System.Drawing.Point(3, 3);
-            this.powerControl1.Name = "powerControl1";
-            this.powerControl1.Size = new System.Drawing.Size(677, 41);
-            this.powerControl1.TabIndex = 1;
-            this.powerControl1.Load += new System.EventHandler(this.powerControl1_Load);
+            this.signalSendViewControl1.Location = new System.Drawing.Point(3, 3);
+            this.signalSendViewControl1.Name = "powerControl1";
+            this.signalSendViewControl1.Size = new System.Drawing.Size(677, 41);
+            this.signalSendViewControl1.TabIndex = 1;
+            this.signalSendViewControl1.Load += new System.EventHandler(this.powerControl1_Load);
             // 
             // MainForm
             // 
@@ -227,7 +227,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn columnVMon;
         private System.Windows.Forms.DataGridViewTextBoxColumn coulmnCMon;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private View.PowerControl powerControl1;
+        private View.SignalSendViewControl signalSendViewControl1;
     }
 }
 

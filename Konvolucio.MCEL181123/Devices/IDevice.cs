@@ -1,4 +1,4 @@
-﻿namespace Konvolucio.MCEL181123
+﻿namespace Konvolucio.MCEL181123.Devices
 {
     using System;
 

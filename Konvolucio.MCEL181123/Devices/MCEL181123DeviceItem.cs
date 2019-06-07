@@ -1,5 +1,5 @@
 ﻿
-namespace Konvolucio.MCEL181123
+namespace Konvolucio.MCEL181123.Devices
 {
     using System;
     using System.ComponentModel;
@@ -13,16 +13,12 @@ namespace Konvolucio.MCEL181123
         const byte MSGTYPE_MCEL_LIVE = 0xFF;
         const byte MSGTPYE_MCEL_MONITOR = 0x01;
 
-
         public const byte MSGTYPE_CVSET = 0x02;
-
-        public static byte TpyeCode = 0x05;
 
         public byte Address { get; private set; }
 
         public byte Rack { get { return (byte)(Address & 0xF0); } }
         public byte Modul { get { return (byte)(Address & 0x0F); } }
-
 
         public float VMon { get; private set; }
         public float CMon { get; private set; }

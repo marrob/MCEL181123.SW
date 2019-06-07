@@ -11,6 +11,7 @@ namespace Konvolucio.MCEL181123
     using System.Diagnostics;
     using Properties;
     using Events;
+    using Signals;
     using View;
 
     static class Program
@@ -36,29 +37,35 @@ namespace Konvolucio.MCEL181123
     {
         public static SynchronizationContext SyncContext = null;
 
+
         IMainForm _mainForm;
         Explorer _explorer;
         IIoService _ioService;
+        SiganlDictinary _dictinary;
+
         private readonly TreeNode _startTreeNode;
 
         public App()
         {
-            /* Main Form */
+            /*** Main Form ***/
             _mainForm = new MainForm();
             _mainForm.Text = AppConstants.SoftwareTitle + " - " + Application.ProductVersion;
             _mainForm.Shown += MainForm_Shown;
             _mainForm.FormClosing += MainForm_FormClosing;
             _mainForm.FormClosed += new FormClosedEventHandler(MainForm_FormClosed);
 
-            /*Explorer*/
+            /*** Explorer ***/
             _explorer = new Explorer();
 
-            /* IoService */
+            /*** IoService ***/
             _ioService = new IoService(_explorer);
             _ioService.Started += IoService_Started;
             _ioService.Stopped += IoService_Stopped;
 
-            /*TimerService*/
+            /*** SiganlDictinary ***/
+            _dictinary = new SiganlDictinary();
+
+            /*** TimerService ***/
             TimerService.Instance.Interval = 1000;
 
             #region MenuBar    
@@ -94,6 +101,26 @@ namespace Konvolucio.MCEL181123
                     //viewMenu,
                     helpMenu,
                 };
+            #endregion
+
+            #region SendView
+
+            var sendView = _mainForm.SendView;
+            sendView.Signals = _dictinary.Signals.Select(n => n.Name).ToArray();
+            sendView.SelectedSignalChanged += (o, s) =>
+            {
+                sendView.Value = _dictinary.Signals.FirstOrDefault(n => n.Name == sendView.SelectedSignal).Value;
+            };
+            sendView.Send += (o, s) =>
+            {
+                _ioService.Send
+                (
+                    _dictinary.Signals.FirstOrDefault(n => n.Name == sendView.SelectedSignal),
+                    sendView.Value,
+                    sendView.Broadcast,
+                    sendView.Address
+                );
+            };
             #endregion
 
             #region Tree

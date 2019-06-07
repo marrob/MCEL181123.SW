@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Konvolucio.MCEL181123
+namespace Konvolucio.MCEL181123.Devices
 {
     using NUnit.Framework;
     using System.Diagnostics;
