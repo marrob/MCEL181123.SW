@@ -1,8 +1,8 @@
 ﻿namespace Konvolucio.MCEL181123.Events
 {
-    class ResetAppEvent : IApplicationEvent
+    class ShowAppEvent : IApplicationEvent
     {
-        public ResetAppEvent()
+        public ShowAppEvent()
         {
 
         }

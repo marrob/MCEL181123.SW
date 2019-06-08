@@ -1,6 +1,4 @@
-﻿
-
-namespace Konvolucio.MCEL181123.Events
+﻿namespace Konvolucio.MCEL181123.Events
 {
 
     using System;

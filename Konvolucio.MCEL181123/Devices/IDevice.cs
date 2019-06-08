@@ -6,6 +6,6 @@
     {
         byte Address { get; }
         void Update(byte msgId, byte[] data);
-        DateTime LastRx { get; }
+        DateTime LastRxTimeStamp { get; }
     }
 }

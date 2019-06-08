@@ -36,11 +36,16 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.dataGridView1 = new Konvolucio.MCEL181123.Controls.KnvDataGridView();
+            this.signalSendViewControl1 = new Konvolucio.MCEL181123.View.SignalSendViewControl();
             this.columnRack = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnModul = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnVMon = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.coulmnCMon = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.signalSendViewControl1 = new Konvolucio.MCEL181123.View.SignalSendViewControl();
+            this.coulmnCrng = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnVmeas = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.coulmnCmeas = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnStatusOe = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.coulmnStatusCc = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.coulmnStatusCv = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.coulmnRunTimeTick = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -139,8 +144,13 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnRack,
             this.columnModul,
-            this.columnVMon,
-            this.coulmnCMon});
+            this.coulmnCrng,
+            this.columnVmeas,
+            this.coulmnCmeas,
+            this.columnStatusOe,
+            this.coulmnStatusCc,
+            this.coulmnStatusCv,
+            this.coulmnRunTimeTick});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.FirstZebraColor = System.Drawing.Color.Bisque;
             this.dataGridView1.Location = new System.Drawing.Point(3, 50);
@@ -149,6 +159,18 @@
             this.dataGridView1.Size = new System.Drawing.Size(677, 92);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.ZebraRow = true;
+            // 
+            // signalSendViewControl1
+            // 
+            this.signalSendViewControl1.Address = ((byte)(0));
+            this.signalSendViewControl1.Broadcast = true;
+            this.signalSendViewControl1.Location = new System.Drawing.Point(3, 3);
+            this.signalSendViewControl1.Name = "signalSendViewControl1";
+            this.signalSendViewControl1.SelectedSignal = "";
+            this.signalSendViewControl1.Size = new System.Drawing.Size(677, 41);
+            this.signalSendViewControl1.TabIndex = 1;
+            this.signalSendViewControl1.Value = "";
+            this.signalSendViewControl1.Load += new System.EventHandler(this.powerControl1_Load);
             // 
             // columnRack
             // 
@@ -166,27 +188,58 @@
             this.columnModul.Name = "columnModul";
             this.columnModul.Width = 50;
             // 
-            // columnVMon
+            // coulmnCrng
             // 
-            this.columnVMon.DataPropertyName = "VMon";
-            this.columnVMon.HeaderText = "V Mon [V]";
-            this.columnVMon.Name = "columnVMon";
-            this.columnVMon.ReadOnly = true;
-            this.columnVMon.ToolTipText = "\"Measured Voltage\"";
-            this.columnVMon.Width = 80;
+            this.coulmnCrng.DataPropertyName = "SIG_MCEL_C_RANGE";
+            this.coulmnCrng.HeaderText = "C RANGE";
+            this.coulmnCrng.Name = "coulmnCrng";
             // 
-            // coulmnCMon
+            // columnVmeas
             // 
-            this.coulmnCMon.HeaderText = "C Mon [A]";
-            this.coulmnCMon.Name = "coulmnCMon";
+            this.columnVmeas.DataPropertyName = "SIG_MCEL_V_MEAS";
+            this.columnVmeas.HeaderText = "V meas [V]";
+            this.columnVmeas.Name = "columnVmeas";
+            this.columnVmeas.ReadOnly = true;
             // 
-            // powerControl1
+            // coulmnCmeas
             // 
-            this.signalSendViewControl1.Location = new System.Drawing.Point(3, 3);
-            this.signalSendViewControl1.Name = "powerControl1";
-            this.signalSendViewControl1.Size = new System.Drawing.Size(677, 41);
-            this.signalSendViewControl1.TabIndex = 1;
-            this.signalSendViewControl1.Load += new System.EventHandler(this.powerControl1_Load);
+            this.coulmnCmeas.DataPropertyName = "SIG_MCEL_C_MEAS";
+            this.coulmnCmeas.HeaderText = "C meas [A]";
+            this.coulmnCmeas.Name = "coulmnCmeas";
+            // 
+            // columnStatusOe
+            // 
+            this.columnStatusOe.DataPropertyName = "SIG_MCEL_OE_STATUS";
+            this.columnStatusOe.HeaderText = "OE";
+            this.columnStatusOe.Name = "columnStatusOe";
+            this.columnStatusOe.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.columnStatusOe.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.columnStatusOe.Width = 50;
+            // 
+            // coulmnStatusCc
+            // 
+            this.coulmnStatusCc.DataPropertyName = "SIG_MCEL_CC_STATUS";
+            this.coulmnStatusCc.HeaderText = "CC";
+            this.coulmnStatusCc.Name = "coulmnStatusCc";
+            this.coulmnStatusCc.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.coulmnStatusCc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.coulmnStatusCc.Width = 50;
+            // 
+            // coulmnStatusCv
+            // 
+            this.coulmnStatusCv.DataPropertyName = "SIG_MCEL_CV_STATUS";
+            this.coulmnStatusCv.HeaderText = "CV";
+            this.coulmnStatusCv.Name = "coulmnStatusCv";
+            this.coulmnStatusCv.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.coulmnStatusCv.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.coulmnStatusCv.Width = 50;
+            // 
+            // coulmnRunTimeTick
+            // 
+            this.coulmnRunTimeTick.DataPropertyName = "SIG_MCEL_RUN_TIME_TICK";
+            this.coulmnRunTimeTick.HeaderText = "Run Time [sec]";
+            this.coulmnRunTimeTick.Name = "coulmnRunTimeTick";
+            this.coulmnRunTimeTick.Width = 150;
             // 
             // MainForm
             // 
@@ -222,12 +275,17 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TreeView treeView1;
         private Controls.KnvDataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnRack;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnModul;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnVMon;
-        private System.Windows.Forms.DataGridViewTextBoxColumn coulmnCMon;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private View.SignalSendViewControl signalSendViewControl1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnRack;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnModul;
+        private System.Windows.Forms.DataGridViewTextBoxColumn coulmnCrng;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnVmeas;
+        private System.Windows.Forms.DataGridViewTextBoxColumn coulmnCmeas;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn columnStatusOe;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn coulmnStatusCc;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn coulmnStatusCv;
+        private System.Windows.Forms.DataGridViewTextBoxColumn coulmnRunTimeTick;
     }
 }
 

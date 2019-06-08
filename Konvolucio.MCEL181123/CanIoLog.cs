@@ -9,16 +9,30 @@ namespace Konvolucio.MCEL181123
     using System.Threading.Tasks;
     using System.Windows.Forms;
 
-    public class LogService
+    public class CanIoLog
     {
-        public static LogService Instance { get; } = new LogService();
+        public static CanIoLog Instance { get; } = new CanIoLog();
         public string Path = Application.StartupPath;
         public bool Enabled;
 
-        public LogService()
+        public double? GetFileSizeKB
+        {
+            get
+            {
+                if (File.Exists(Path))
+                {
+                    FileInfo fi = new FileInfo(Path);
+                    return fi.Length / 1024;
+                }
+                else
+                    return null;
+            }
+        }
+
+        public CanIoLog()
         {
             Enabled = true;
-            Path = "debugLog.txt";
+            Path = "CanFrameLog.txt";
         }
 
         public void WirteLine(string line)

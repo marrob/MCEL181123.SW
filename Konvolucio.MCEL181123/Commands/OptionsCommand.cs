@@ -25,7 +25,7 @@ namespace Konvolucio.MCEL181123.Commands
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
-            _app.CanConfig();
+            //_app.CanConfig();
             Debug.WriteLine(this.GetType().Namespace + "." + this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "()");
             //_mainForm.AlwaysOnTop = !_mainForm.AlwaysOnTop;
             //Checked = _mainForm.AlwaysOnTop;

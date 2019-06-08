@@ -11,14 +11,11 @@ namespace Konvolucio.MCEL181123
     using System.Diagnostics;
     using Properties;
     using Events;
-    using CanDatabase;
+    using Database;
 
 
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
@@ -30,7 +27,7 @@ namespace Konvolucio.MCEL181123
 
     public interface IApp
     {
-        void CanConfig();
+
     }
 
     public class App : IApp
@@ -45,9 +42,7 @@ namespace Konvolucio.MCEL181123
         private readonly TreeNode _startTreeNode;
 
         public App()
-        {
-
-            
+        { 
             /*** Main Form ***/
             _mainForm = new MainForm();
             _mainForm.Text = AppConstants.SoftwareTitle + " - " + Application.ProductVersion;
@@ -94,7 +89,7 @@ namespace Konvolucio.MCEL181123
 
             _mainForm.MenuBar = new ToolStripItem[]
                 {
-                    configMenu,
+                   // configMenu,
                     runMenu,
                     //viewMenu,
                     helpMenu,
@@ -125,20 +120,7 @@ namespace Konvolucio.MCEL181123
             #endregion
 
             #region Tree
-
-            //_mainForm.Tree.Nodes.Add(
-            // _startTreeNode = new View.TreeNodes.StatisticsTreeNode(
-            //       new TreeNode[]
-            //            {
-            //                new View.TreeNodes.WaitForParseTreeNode(_ioService),
-            //                new View.TreeNodes.DropFrameTreeNode(_ioService),
-            //                new View.TreeNodes.ParsedFrameTreeNode(_ioService),
-            //                new View.TreeNodes.RxFramesTreeNode(_ioService),
-            //                new View.TreeNodes.RacksTreeNode(_explorer),
-            //                new View.TreeNodes.ModulsTree(_explorer),
-            //            }
-            //        )
-            //    );
+            _mainForm.Tree.AfterSelect += Tree_AfterSelect;
             _mainForm.Tree.Nodes.AddRange(
                 new TreeNode[]
                     {
@@ -149,13 +131,25 @@ namespace Konvolucio.MCEL181123
                         new View.TreeNodes.ParsedFrameTreeNode(_ioService),
                         new View.TreeNodes.RxFramesTreeNode(_ioService),
                         new View.TreeNodes.TxFramesTreeNode(_ioService),
-                        new View.TreeNodes.WaitForTxTreeNode(_ioService)
-                    });                 
-              
+                        new View.TreeNodes.WaitForTxTreeNode(_ioService),
+                        new View.TreeNodes.CanFrameLogTreeNode()
+                    });
+
+            _mainForm.Tree.ContextMenuStrip = new ContextMenuStrip();
+            _mainForm.Tree.ContextMenuStrip.Items.AddRange(
+                new ToolStripItem[]
+                {
+                    new View.Commands.OpenCanIOLogFileCommand(),
+                    new View.Commands.DeleteCanIOLogFileCommand()
+                });
+
             #endregion
 
             #region DataGrid
-            _mainForm.DataGrid.DataSource = _explorer.Devices;
+
+            var grid = _mainForm.DataGrid;
+            grid.DataSource = _explorer.Devices;
+           
             #endregion
 
             #region StatusBar
@@ -177,40 +171,24 @@ namespace Konvolucio.MCEL181123
             Application.Run((MainForm)_mainForm);
         }
 
+        private void Tree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            EventAggregator.Instance.Publish(new TreeNodeChangedAppEvent(e.Node));
+        }
 
-        /// <summary>
-        /// Started
-        /// </summary>
         private void IoService_Started(object sender, EventArgs e)
         {
             EventAggregator.Instance.Publish(new PlayAppEvent(_ioService));
+            _explorer.StartTimeSamp = DateTime.Now;
             TimerService.Instance.Start();
         }
 
-        /// <summary>
-        /// Stopped
-        /// </summary>
         private void IoService_Stopped(object sender, EventArgs e)
         {
             EventAggregator.Instance.Publish(new StopAppEvent(_ioService));
             TimerService.Instance.Stop();
         }
 
-
-        /// <summary>
-        /// Stopped
-        /// </summary>
-        public void CanConfig()
-        {
-
-        }
-
-        /// <summary>
-        /// MainFrom megjelnt 
-        /// Innentől él s SyncContext!
-        /// User felé a default állapot, ami nem kerül soha mentésre...
-        /// Betölti a GUI paramtéereket.
-        /// </summary>
         void MainForm_Shown(object sender, EventArgs e)
         {
 #if TRACE
@@ -228,34 +206,25 @@ namespace Konvolucio.MCEL181123
             Start(Environment.GetCommandLineArgs());
             /*Kezdő Node Legyen az Adapter node*/
             //EventAggregator.Instance.Publish<TreeViewSelectionChangedAppEvent>(new TreeViewSelectionChangedAppEvent(_startTreeNode));
+
+            EventAggregator.Instance.Publish(new ShowAppEvent());
+
         }
 
-
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="args">A fájl - hoz tartozó argumentumok.</param>
         public void Start(string[] args)
         {
 #if TRACE
             Debug.WriteLine(this.GetType().Namespace + "." + this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + ": " + string.Join("\r\n -", args));
 #endif
         }
-        /// <summary>
-        /// Az alaklamzás bezárását kérte a felhasználó, ez még megszakítható
-        /// </summary>
+
         void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
 #if TRACE
             Debug.WriteLine(this.GetType().Namespace + "." + this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "()");
 #endif
         }
-        /// <summary>
-        /// MainFrom bezárult 
-        /// Itt ment mindent amit kell.
-        /// </summary>
+
         void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
 #if TRACE

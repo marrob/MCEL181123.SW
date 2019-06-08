@@ -11,7 +11,7 @@ namespace Konvolucio.MCEL181123
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using View;
-
+    using Database;
 
 
     public interface IMainForm
@@ -67,6 +67,9 @@ namespace Konvolucio.MCEL181123
         public MainForm()
         {
             InitializeComponent();
+
+            dataGridView1.AutoGenerateColumns = false;
+            columnVmeas.ToolTipText = CanDb.Instance.Signals.FirstOrDefault(n => n.Name == SignalCollection.SIG_MCEL_V_MEAS).Description;
         }
 
         private void powerControl1_Load(object sender, EventArgs e)

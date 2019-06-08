@@ -7,7 +7,9 @@
         public const string SoftwareCustomer = "Konvolúció Bt.";
         public const string SoftwareTitle = "MCEL181123 - BATTERY CELL EMULATOR";
         public const string GenericTimestampFormat = "yyyy.MM.dd HH:mm:ss";
+        public const string FileNameTimestampFormat = "yyMMdd_HHmmss";
         public const string FileFilter = "*.csv,*.mes,*.typ|*.csv;*.mes;*.typ|*.csv|*.csv|*.mes|*.mes|*.typ|*.mes";
         public const string NewLine = "\r\n";
+        public const string CsvFileSeparator = ",";
     }
 }

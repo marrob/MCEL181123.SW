@@ -1,104 +1,9 @@
-﻿namespace Konvolucio.MCEL181123.CanDatabase
+﻿namespace Konvolucio.MCEL181123.Database
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Common;
-
-
-
-    public class NodeItem
-    {
-        public string Name { get; set; }
-        public byte Id { get; set; }
-
-        public NodeItem(string name, byte id)
-        {
-            Name = name;
-            Id = id;
-        }
-    }
-
-    public class NodeCollection : List<NodeItem>
-    {
-        public const string NODE_PC = "NODE_PC";
-        public const string NODE_MCEL = "NODE_MCEL";
-    }
-
-    public class MessageItem
-    {
-       
-      
-        public string Name { get; set;}
-        public byte Id { get;set; }
-        public NodeItem Node { get; private set; }
-        public UInt64 Value { get; set; }
-
-        public MessageItem()  { }
-
-        public MessageItem(string name, byte id, NodeItem node)
-        {
-            Name = name;
-            Id = id;
-            Node = node;
-        }
-    }
-
-    public class MessageCollection : List<MessageItem>
-    {
-        /*** MCEL181123 Messages ***/
-        public const string MSG_MCEL_V_MEAS = "MSG_MCEL_V_MEAS";
-        public const string MSG_MCEL_C_MEAS = "MSG_MCEL_C_MEAS";
-        public const string MSG_MCEL_STATUS = "MSG_MCEL_STATUS";
-        public const string MSG_MCEL_LIVE = "MSG_MCEL_LIVE";
-
-        /*** PC Messages ***/
-        public const string MSG_PC_CC_SET = "MSG_PC_CC_SET";
-        public const string MSG_PC_CV_SET = "MSG_PC_CV_SET";
-    }
-
-    public class SignalItem
-    {
-
-        public string Name { get; set; }
-        public MessageItem Message { get; private set; } 
-        public string DefaultValue { get; set; }
-        public string Type { get; set; }
-        public int StartBit { get; set; }
-        public int Bits { get; set; }
-        public string Description { get; set; }
-
-        public SignalItem() { }
-
-        public SignalItem(string name, MessageItem msg, string defaultValue, string type,int startBit, int bits, string description)
-        {
-            Name = name.ToUpper();
-            Message = msg;
-            DefaultValue = defaultValue;
-            Type = type;
-            StartBit = startBit;
-            Bits = bits;
-        }
-    }
-
-    public class SignalCollection : List<SignalItem>
-    {
-        /*** Tx By MCEL181123 ***/
-        public const string SIG_MCEL_V_MEAS = "SIG_MCEL_V_MEAS";
-        public const string SIG_MCEL_C_MEAS = "SIG_MCEL_C_MEAS";
-        public const string SIG_MCEL_C_RANGE = "SIG_MCEL_C_RANGE";
-        public const string SIG_MCEL_CC_STATUS = "SIG_MCEL_CC_STATUS";
-        public const string SIG_MCEL_CV_STATUS = "SIG_MCEL_CV_STATUS";
-        public const string SIG_MCEL_OE_STATUS = "SIG_MCEL_OE_STATUS";
-        public const string SIG_MCEL_RUN_TIME_TICK = "SIG_MCEL_V_MEAS";
-
-        /*** Tx By PC ***/
-        public const string SIG_PC_CV_SET = "SIG_PC_CV_SET";
-        public const string SIG_PC_CC_SET = "SIG_PC_CC_SET";
-        public const string SIG_PC_C_MEAS_RNG_SET = "SIG_PC_C_MEAS_RNG_SET";
-    }
 
     class CanDb
     {
@@ -129,25 +34,25 @@
                     /*** MCEL181123 Messages ***/
                     new MessageItem(
                         name:MessageCollection.MSG_MCEL_V_MEAS,
-                        id:0x01,
+                        id:MessageCollection.MSG_MCEL_V_MEAS_ID,
                         node: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
                         ),
 
                     new MessageItem(
                         name:MessageCollection.MSG_MCEL_C_MEAS,
-                        id:0x02,
+                        id:MessageCollection.MSG_MCEL_C_MEAS_ID,
                         node: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
                         ),
 
                     new MessageItem(
                         name:MessageCollection.MSG_MCEL_STATUS,
-                        id:0x03,
+                        id:MessageCollection.MSG_MCEL_STATUS_ID,
                         node: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
                         ),
 
                     new MessageItem(
                         name:MessageCollection.MSG_MCEL_LIVE,
-                        id:0xFF,
+                        id:MessageCollection.MSG_MCEL_LIVE_ID,
                         node: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
                         ),
                     
@@ -323,15 +228,27 @@
             return (byte)((arbId & 0x00FF0000) >> 16);
         }
 
-        public void InserMsg()
+        public float GetValueFloat(SignalItem signal, byte[] data)
         {
-
+            return BitConverter.ToSingle(data, signal.StartBit / 8);
         }
 
-        public SignalItem GetSignal(NodeItem node, byte msgId)
+        public byte GetValueU8(SignalItem signal, byte[] data)
         {
-            var signalsOfNode = Signals.Where(n => n.Message.Node == node).Select(n=>n);
-            return signalsOfNode.FirstOrDefault(n=>n.Message.Id == msgId);
+            return data[signal.StartBit / 8];
         }
+
+        public bool GetValueBool(SignalItem signal, byte[] data)
+        {
+            ulong v64 = BitConverter.ToUInt64(data, 0);
+            ulong mask = (ulong)1 << signal.StartBit;
+            return (v64 & mask) == v64;
+        }
+
+        public ulong GetValueU64(SignalItem signal, byte[] data)
+        {
+            return BitConverter.ToUInt64(data,0);
+        }
+
     }
 }

@@ -84,6 +84,14 @@
     <Compile Include="Controls\KnvDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Database\MessageCollection.cs" />
+    <Compile Include="Database\MessageItem.cs" />
+    <Compile Include="Database\NodeCollection.cs" />
+    <Compile Include="Database\NodeItem.cs" />
+    <Compile Include="Database\SignalCollection.cs" />
+    <Compile Include="Database\SignalItem.cs" />
+    <Compile Include="Events\ShowAppEvent.cs" />
+    <Compile Include="Events\TreeNodeChangedAppEvent.cs" />
     <Compile Include="Explorer.cs" />
     <Compile Include="Events\EventAggregator.cs" />
     <Compile Include="Events\ResetAppEvent .cs" />
@@ -91,7 +99,7 @@
     <Compile Include="Events\StopAppEvent.cs" />
     <Compile Include="Events\UnitTest_EventAggregator.cs" />
     <Compile Include="Devices\IDevice.cs" />
-    <Compile Include="LogService.cs" />
+    <Compile Include="CanIoLog.cs" />
     <Compile Include="Devices\MCEL181123DeviceItem.cs" />
     <Compile Include="Devices\MCEL181123DeviceCollection.cs" />
     <Compile Include="Devices\UintTest.cs" />
@@ -123,6 +131,13 @@
     </Compile>
     <Compile Include="TimerService.cs" />
     <Compile Include="Database\UintTest.cs" />
+    <Compile Include="View\Commands\OpenCanIOLogFileCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\Commands\DeleteCanIOLogFileCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\TreeNodes\CanFrameLogTreeNode.cs" />
     <Compile Include="View\TreeNodes\ModulsTreeNode.cs" />
     <Compile Include="View\TreeNodes\RacksTreeNode.cs" />
     <Compile Include="View\TreeNodes\TxFramesTreeNode.cs" />
@@ -208,6 +223,7 @@
   <ItemGroup>
     <None Include="Resources\adapter.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -189,7 +189,7 @@
 
                         Buffer.BlockCopy(datatemp, 0, data, 0, rx.DataLength);
 
-                        LogService.Instance.WirteLine(arbId.ToString("X8") + " " + Tools.ByteArrayLogString(data));
+                        CanIoLog.Instance.WirteLine(arbId.ToString("X8") + " " + Tools.ByteArrayLogString(data));
 
                         doMehtod = () =>
                         {
