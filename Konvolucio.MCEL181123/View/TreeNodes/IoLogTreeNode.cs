@@ -10,9 +10,9 @@ namespace Konvolucio.MCEL181123.View.TreeNodes
     using System.Windows.Forms;
     using Events;
 
-    internal sealed class CanFrameLogTreeNode : TreeNode
+    internal sealed class IoLogTreeNode : TreeNode
     {
-        public CanFrameLogTreeNode()
+        public IoLogTreeNode()
         {
 
             Text = "CAN IO Log" + @": " + AppConstants.ValueNotAvailable2;
@@ -23,14 +23,17 @@ namespace Konvolucio.MCEL181123.View.TreeNodes
             EventAggregator.Instance.Subscribe<PlayAppEvent>(e => Timer_Tick(null, EventArgs.Empty));
             EventAggregator.Instance.Subscribe<ResetAppEvent>(e => Timer_Tick(null, EventArgs.Empty));
             EventAggregator.Instance.Subscribe<ShowAppEvent>(e => Timer_Tick(null, EventArgs.Empty));
+            EventAggregator.Instance.Subscribe<RefreshAppEvent>(e => Timer_Tick(null, EventArgs.Empty));
 
             void Timer_Tick(object sender, EventArgs e)
             {
-                if(CanIoLog.Instance.GetFileSizeKB.HasValue)
-                   Text = "CAN IO Log" + @": " + CanIoLog.Instance.GetFileSizeKB + "KB";
+                if(IoLog.Instance.GetFileSizeKB.HasValue)
+                   Text = "CAN IO Log" + @": " + IoLog.Instance.GetFileSizeKB + "KB";
                 else
                    Text = "CAN IO Log" + @": " + AppConstants.ValueNotAvailable2;
             }
+
+
         }
     }
 }

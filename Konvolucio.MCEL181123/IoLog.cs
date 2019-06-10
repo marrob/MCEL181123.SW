@@ -9,9 +9,9 @@ namespace Konvolucio.MCEL181123
     using System.Threading.Tasks;
     using System.Windows.Forms;
 
-    public class CanIoLog
+    public class IoLog
     {
-        public static CanIoLog Instance { get; } = new CanIoLog();
+        public static IoLog Instance { get; } = new IoLog();
         public string Path = Application.StartupPath;
         public bool Enabled;
 
@@ -29,10 +29,10 @@ namespace Konvolucio.MCEL181123
             }
         }
 
-        public CanIoLog()
+        public IoLog()
         {
             Enabled = true;
-            Path = "CanFrameLog.txt";
+            Path = "IoLog.txt";
         }
 
         public void WirteLine(string line)

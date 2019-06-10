@@ -39,8 +39,8 @@ namespace Konvolucio.MCEL181123.View.TreeNodes
 
             void Timer_Tick(object sender, EventArgs e)
             {
-                if(_ioService.GetWaitForParseFrames.HasValue)
-                   Text = "Wait For Tx" + @": " + _ioService.GetWaitForParseFrames;
+                if(_ioService.GetWaitForTxFrames.HasValue)
+                   Text = "Wait For Tx" + @": " + _ioService.GetWaitForTxFrames;
                 else
                    Text = "Wait For Tx" + @": " + AppConstants.ValueNotAvailable2;
             }

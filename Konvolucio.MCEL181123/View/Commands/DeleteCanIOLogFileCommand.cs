@@ -20,15 +20,18 @@ namespace Konvolucio.MCEL181123.View.Commands
 
             EventAggregator.Instance.Subscribe<TreeNodeChangedAppEvent>(e =>
             {
-                Visible = (e.SelectedNode is CanFrameLogTreeNode);
+                Visible = (e.SelectedNode is IoLogTreeNode);
             });
         }
 
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
-            if(File.Exists(CanIoLog.Instance.Path))
-                File.Delete(CanIoLog.Instance.Path);
+            if (File.Exists(IoLog.Instance.Path))
+            {
+                File.Delete(IoLog.Instance.Path);
+                EventAggregator.Instance.Publish(new RefreshAppEvent(this));
+            }
         }
     }
 }

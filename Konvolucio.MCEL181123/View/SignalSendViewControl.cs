@@ -65,7 +65,12 @@ namespace Konvolucio.MCEL181123.View
 
         public string SelectedSignal
         {
-            get =>  comboBoxSignal.Text;
+            get
+            {
+                if (string.IsNullOrEmpty(comboBoxSignal.Text))
+                  return comboBoxSignal.Text = comboBoxSignal.Items[0].ToString();
+                return comboBoxSignal.Text;
+            }
             set => comboBoxSignal.Text = value;
         }
 

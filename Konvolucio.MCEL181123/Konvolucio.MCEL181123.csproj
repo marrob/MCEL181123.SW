@@ -79,6 +79,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Common\CanMsg.cs" />
+    <Compile Include="Common\IWindowLayoutRestoring.cs" />
     <Compile Include="Common\SafeQueue.cs" />
     <Compile Include="Common\Tools.cs" />
     <Compile Include="Controls\KnvDataGridView.cs">
@@ -99,18 +100,19 @@
     <Compile Include="Events\StopAppEvent.cs" />
     <Compile Include="Events\UnitTest_EventAggregator.cs" />
     <Compile Include="Devices\IDevice.cs" />
-    <Compile Include="CanIoLog.cs" />
+    <Compile Include="IoLog.cs" />
     <Compile Include="Devices\MCEL181123DeviceItem.cs" />
     <Compile Include="Devices\MCEL181123DeviceCollection.cs" />
     <Compile Include="Devices\UintTest.cs" />
     <Compile Include="NiCan\NiCan.cs" />
     <Compile Include="NiCan\NiCanTools.cs" />
     <Compile Include="NiCan\NiCanIoException.cs" />
+    <Compile Include="Events\RefreshAppEvent.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IoService.cs" />
     <Compile Include="NiCan\NiCan_UnitTest_basics.cs" />
-    <Compile Include="Database\CanDatabase.cs" />
+    <Compile Include="Database\CanDb.cs" />
     <Compile Include="StatusBar\EmptyStatus.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -137,7 +139,7 @@
     <Compile Include="View\Commands\DeleteCanIOLogFileCommand.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\TreeNodes\CanFrameLogTreeNode.cs" />
+    <Compile Include="View\TreeNodes\IoLogTreeNode.cs" />
     <Compile Include="View\TreeNodes\ModulsTreeNode.cs" />
     <Compile Include="View\TreeNodes\RacksTreeNode.cs" />
     <Compile Include="View\TreeNodes\TxFramesTreeNode.cs" />

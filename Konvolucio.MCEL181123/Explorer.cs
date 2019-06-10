@@ -31,7 +31,7 @@ namespace Konvolucio.MCEL181123
 
         public bool UpdateTask(CanMsg msg)
         {
-            if (CanDb.GetNodeId(msg.ArbId) == CanDb.Instance.Nodes.FirstOrDefault(n => n.Name == NodeCollection.NODE_MCEL).Id)
+            if (CanDb.GetNodeTypeId(msg.ArbId) == CanDb.Instance.Nodes.FirstOrDefault(n => n.Name == NodeCollection.NODE_MCEL).NodeTypeId)
             {
                 byte node = CanDb.GetNodeAddress(msg.ArbId);
                 byte msgId = CanDb.GetMsgId(msg.ArbId);

@@ -149,7 +149,7 @@
             GetParsedFrames = 0;
             GetRxFrames = 0;
             GetTxFrames = 0;
-            GetWaitForTxFrames = 0;
+            GetWaitForTxFrames  = 0;
             do
             {
                 var rx = new NiCan.NCTYPE_CAN_STRUCT();
@@ -189,7 +189,7 @@
 
                         Buffer.BlockCopy(datatemp, 0, data, 0, rx.DataLength);
 
-                        CanIoLog.Instance.WirteLine(arbId.ToString("X8") + " " + Tools.ByteArrayLogString(data));
+                        IoLog.Instance.WirteLine("RX " + arbId.ToString("X8") + " " + Tools.ByteArrayLogString(data));
 
                         doMehtod = () =>
                         {
@@ -205,12 +205,14 @@
 
 
                         /*** Write ***/
+                        GetWaitForTxFrames = TxQueue.Count;
                         if ((GetWaitForTxFrames = TxQueue.Count) != 0)
                         {
                             var tx = TxQueue.Dequeue();
                             var niTx = new NiCan.NCTYPE_CAN_FRAME();
-
+                            tx.ArbId |= 0x20000000;
                             niTx.ArbitrationId = tx.ArbId;
+                            niTx.DataLength = 8;
                             niTx.IsRemote = NiCan.NC_FALSE;
                             niTx.Data0 = tx.Data[0];
                             niTx.Data1 = tx.Data[1];
@@ -221,6 +223,8 @@
                             niTx.Data6 = tx.Data[6];
                             niTx.Data7 = tx.Data[7];
 
+                            IoLog.Instance.WirteLine("TX " + tx.ArbId.ToString("X8") + " " + Tools.ByteArrayLogString(tx.Data));
+                            
                             if ((status = NiCan.ncWrite(_handle, NiCan.CanFrameSize, ref niTx)) != 0)
                             {
                                 loopException = new NiCanIoException(status);

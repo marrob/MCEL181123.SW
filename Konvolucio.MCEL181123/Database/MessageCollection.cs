@@ -1,10 +1,6 @@
 ﻿namespace Konvolucio.MCEL181123.Database
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using Common;
-
 
     public class MessageCollection : List<MessageItem>
     {

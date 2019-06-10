@@ -36,16 +36,16 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.dataGridView1 = new Konvolucio.MCEL181123.Controls.KnvDataGridView();
-            this.signalSendViewControl1 = new Konvolucio.MCEL181123.View.SignalSendViewControl();
             this.columnRack = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnModul = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.coulmnCrng = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnVmeas = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.coulmnCmeas = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnStatusOe = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.coulmnStatusCc = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.coulmnStatusCv = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.coulmnStatusCc = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.coulmnRunTimeTick = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.signalSendViewControl1 = new Konvolucio.MCEL181123.View.SignalSendViewControl();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -96,7 +96,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel2);
             this.splitContainer1.Size = new System.Drawing.Size(874, 145);
-            this.splitContainer1.SplitterDistance = 187;
+            this.splitContainer1.SplitterDistance = 190;
             this.splitContainer1.TabIndex = 7;
             // 
             // treeView1
@@ -105,7 +105,7 @@
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView1.Location = new System.Drawing.Point(0, 0);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(187, 145);
+            this.treeView1.Size = new System.Drawing.Size(190, 145);
             this.treeView1.TabIndex = 0;
             // 
             // panel2
@@ -115,7 +115,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(683, 145);
+            this.panel2.Size = new System.Drawing.Size(680, 145);
             this.panel2.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -130,7 +130,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 47F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(683, 145);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(680, 145);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // dataGridView1
@@ -148,29 +148,17 @@
             this.columnVmeas,
             this.coulmnCmeas,
             this.columnStatusOe,
-            this.coulmnStatusCc,
             this.coulmnStatusCv,
+            this.coulmnStatusCc,
             this.coulmnRunTimeTick});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.FirstZebraColor = System.Drawing.Color.Bisque;
             this.dataGridView1.Location = new System.Drawing.Point(3, 50);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.SecondZebraColor = System.Drawing.Color.White;
-            this.dataGridView1.Size = new System.Drawing.Size(677, 92);
+            this.dataGridView1.Size = new System.Drawing.Size(674, 92);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.ZebraRow = true;
-            // 
-            // signalSendViewControl1
-            // 
-            this.signalSendViewControl1.Address = ((byte)(0));
-            this.signalSendViewControl1.Broadcast = true;
-            this.signalSendViewControl1.Location = new System.Drawing.Point(3, 3);
-            this.signalSendViewControl1.Name = "signalSendViewControl1";
-            this.signalSendViewControl1.SelectedSignal = "";
-            this.signalSendViewControl1.Size = new System.Drawing.Size(677, 41);
-            this.signalSendViewControl1.TabIndex = 1;
-            this.signalSendViewControl1.Value = "";
-            this.signalSendViewControl1.Load += new System.EventHandler(this.powerControl1_Load);
             // 
             // columnRack
             // 
@@ -216,15 +204,6 @@
             this.columnStatusOe.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.columnStatusOe.Width = 50;
             // 
-            // coulmnStatusCc
-            // 
-            this.coulmnStatusCc.DataPropertyName = "SIG_MCEL_CC_STATUS";
-            this.coulmnStatusCc.HeaderText = "CC";
-            this.coulmnStatusCc.Name = "coulmnStatusCc";
-            this.coulmnStatusCc.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.coulmnStatusCc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.coulmnStatusCc.Width = 50;
-            // 
             // coulmnStatusCv
             // 
             this.coulmnStatusCv.DataPropertyName = "SIG_MCEL_CV_STATUS";
@@ -234,12 +213,32 @@
             this.coulmnStatusCv.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.coulmnStatusCv.Width = 50;
             // 
+            // coulmnStatusCc
+            // 
+            this.coulmnStatusCc.DataPropertyName = "SIG_MCEL_CC_STATUS";
+            this.coulmnStatusCc.HeaderText = "CC";
+            this.coulmnStatusCc.Name = "coulmnStatusCc";
+            this.coulmnStatusCc.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.coulmnStatusCc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.coulmnStatusCc.Width = 50;
+            // 
             // coulmnRunTimeTick
             // 
             this.coulmnRunTimeTick.DataPropertyName = "SIG_MCEL_RUN_TIME_TICK";
             this.coulmnRunTimeTick.HeaderText = "Run Time [sec]";
             this.coulmnRunTimeTick.Name = "coulmnRunTimeTick";
             this.coulmnRunTimeTick.Width = 150;
+            // 
+            // signalSendViewControl1
+            // 
+            this.signalSendViewControl1.Address = ((byte)(0));
+            this.signalSendViewControl1.Broadcast = true;
+            this.signalSendViewControl1.Location = new System.Drawing.Point(3, 3);
+            this.signalSendViewControl1.Name = "signalSendViewControl1";
+            this.signalSendViewControl1.SelectedSignal = "";
+            this.signalSendViewControl1.Size = new System.Drawing.Size(674, 41);
+            this.signalSendViewControl1.TabIndex = 1;
+            this.signalSendViewControl1.Value = "";
             // 
             // MainForm
             // 
@@ -283,8 +282,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn columnVmeas;
         private System.Windows.Forms.DataGridViewTextBoxColumn coulmnCmeas;
         private System.Windows.Forms.DataGridViewCheckBoxColumn columnStatusOe;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn coulmnStatusCc;
         private System.Windows.Forms.DataGridViewCheckBoxColumn coulmnStatusCv;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn coulmnStatusCc;
         private System.Windows.Forms.DataGridViewTextBoxColumn coulmnRunTimeTick;
     }
 }

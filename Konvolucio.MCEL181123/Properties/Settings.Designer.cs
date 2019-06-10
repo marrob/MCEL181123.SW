@@ -8,22 +8,174 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Konvolucio.MCEL181123.Properties
-{
-
-
+namespace Konvolucio.MCEL181123.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
-    {
-
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
-        {
-            get
-            {
+        
+        public static Settings Default {
+            get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState MainFormWindowState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["MainFormWindowState"]));
+            }
+            set {
+                this["MainFormWindowState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("890, 230")]
+        public global::System.Drawing.Size MainFormSize {
+            get {
+                return ((global::System.Drawing.Size)(this["MainFormSize"]));
+            }
+            set {
+                this["MainFormSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point MainFormLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["MainFormLocation"]));
+            }
+            set {
+                this["MainFormLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsDeveloperMode {
+            get {
+                return ((bool)(this["IsDeveloperMode"]));
+            }
+            set {
+                this["IsDeveloperMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsFirstStart {
+            get {
+                return ((bool)(this["IsFirstStart"]));
+            }
+            set {
+                this["IsFirstStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BrowseLocation {
+            get {
+                return ((string)(this["BrowseLocation"]));
+            }
+            set {
+                this["BrowseLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("190")]
+        public int MainTree_SplitterDistance {
+            get {
+                return ((int)(this["MainTree_SplitterDistance"]));
+            }
+            set {
+                this["MainTree_SplitterDistance"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableSingleInstance {
+            get {
+                return ((bool)(this["EnableSingleInstance"]));
+            }
+            set {
+                this["EnableSingleInstance"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PlayAfterStartUp {
+            get {
+                return ((bool)(this["PlayAfterStartUp"]));
+            }
+            set {
+                this["PlayAfterStartUp"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IoLogEnable {
+            get {
+                return ((bool)(this["IoLogEnable"]));
+            }
+            set {
+                this["IoLogEnable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ApplictionSettingsSaveCounter {
+            get {
+                return ((int)(this["ApplictionSettingsSaveCounter"]));
+            }
+            set {
+                this["ApplictionSettingsSaveCounter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ApplictionSettingsUpgradeCounter {
+            get {
+                return ((int)(this["ApplictionSettingsUpgradeCounter"]));
+            }
+            set {
+                this["ApplictionSettingsUpgradeCounter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public int GuiRefreshRateMs {
+            get {
+                return ((int)(this["GuiRefreshRateMs"]));
+            }
+            set {
+                this["GuiRefreshRateMs"] = value;
             }
         }
     }

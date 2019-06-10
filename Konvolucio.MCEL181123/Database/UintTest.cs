@@ -26,10 +26,10 @@ namespace Konvolucio.MCEL181123.Database
                     {
                         new NodeItem(
                             name:"PC",
-                            id:0x02),
+                            nodeTypeId:0x02),
                         new NodeItem(
                             name:"Device",
-                            id:0x03),
+                            nodeTypeId:0x03),
                     }
                 );
 
@@ -42,12 +42,12 @@ namespace Konvolucio.MCEL181123.Database
                         new MessageItem(
                             name:"MSG_MEAS",
                             id:0x02,
-                            node: nodes.FirstOrDefault(n=>n.Name == "MCEL181123")
+                            txNode: nodes.FirstOrDefault(n=>n.Name == "MCEL181123")
                             ),
                         new MessageItem(
                             name:"MSG_MCEL_CV_SET",
                             id:0x03,
-                            node: nodes.FirstOrDefault(n=>n.Name == "MCEL181123")
+                            txNode: nodes.FirstOrDefault(n=>n.Name == "MCEL181123")
                             ),
                     }
                 );
@@ -77,28 +77,28 @@ namespace Konvolucio.MCEL181123.Database
                 );
 
 
-          var canMsg = CanDb.MakeMessage( nodeId: 0x05,
+          var canMsg = CanDb.MakeMessage( nodeTypeId: 0x05,
                             signal: signals.FirstOrDefault(n => n.Name == "SIG_MEAS_VBAT"),
                             value: "1", 
                             broadcast: false,
-                            devId: 0x01);
+                            nodeAddress: 0x01);
 
             Assert.AreEqual(new byte[] { 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, canMsg.Data );
 
 
-            canMsg = CanDb.MakeMessage(nodeId: 0x05,
+            canMsg = CanDb.MakeMessage(nodeTypeId: 0x05,
                   signal: signals.FirstOrDefault(n => n.Name == "SIG_MEAS_VBAT"),
                   value: "32768",
                   broadcast: false,
-                  devId: 0x01);
+                  nodeAddress: 0x01);
 
             Assert.AreEqual(new byte[] { 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, canMsg.Data);
 
-            canMsg = CanDb.MakeMessage(nodeId: 0x05,
+            canMsg = CanDb.MakeMessage(nodeTypeId: 0x05,
                   signal: signals.FirstOrDefault(n => n.Name == "SIG_MEAS_VBAT"),
                   value: "65535",
                   broadcast: false,
-                  devId: 0x01);
+                  nodeAddress: 0x01);
 
             Assert.AreEqual(new byte[] { 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, canMsg.Data);
 

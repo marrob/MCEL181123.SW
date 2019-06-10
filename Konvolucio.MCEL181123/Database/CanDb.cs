@@ -20,10 +20,10 @@
                 {
                     new NodeItem(
                         name:NodeCollection.NODE_PC,
-                        id:0x01),
+                        nodeTypeId:0x01),
                     new NodeItem(
                         name:NodeCollection.NODE_MCEL,
-                        id:0x05),
+                        nodeTypeId:0x05),
                 }
             );
 
@@ -35,37 +35,37 @@
                     new MessageItem(
                         name:MessageCollection.MSG_MCEL_V_MEAS,
                         id:MessageCollection.MSG_MCEL_V_MEAS_ID,
-                        node: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
+                        txNode: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
                         ),
 
                     new MessageItem(
                         name:MessageCollection.MSG_MCEL_C_MEAS,
                         id:MessageCollection.MSG_MCEL_C_MEAS_ID,
-                        node: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
+                        txNode: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
                         ),
 
                     new MessageItem(
                         name:MessageCollection.MSG_MCEL_STATUS,
                         id:MessageCollection.MSG_MCEL_STATUS_ID,
-                        node: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
+                        txNode: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
                         ),
 
                     new MessageItem(
                         name:MessageCollection.MSG_MCEL_LIVE,
                         id:MessageCollection.MSG_MCEL_LIVE_ID,
-                        node: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
+                        txNode: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
                         ),
                     
                     /*** PC Messages ***/
                     new MessageItem(
                         name:MessageCollection.MSG_PC_CC_SET,
                         id:0x02,
-                        node: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_PC)
+                        txNode: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_PC)
                         ),
                     new MessageItem(
                         name:MessageCollection.MSG_PC_CV_SET,
                         id:0x03,
-                        node: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_PC)
+                        txNode: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_PC)
                         ),
 
 
@@ -92,8 +92,8 @@
                                 msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_C_MEAS),
                                 defaultValue: "0.00",
                                 type: "FLOAT",
-                                startBit: 32,
-                                bits: 63,
+                                startBit: 0,
+                                bits: 32,
                                 description: "Mért áram."),
 
                     new SignalItem(
@@ -106,13 +106,14 @@
                                 description: "Mért áram méréshatára"),
 
                     new SignalItem(
-                                name: SignalCollection.SIG_MCEL_CC_STATUS,
+                                name: SignalCollection.SIG_MCEL_OE_STATUS,
                                 msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_STATUS),
                                 defaultValue: "0",
                                 type: "UNSIGNED",
                                 startBit: 0,
                                 bits: 1,
                                 description: ""),
+
 
                     new SignalItem(
                                 name: SignalCollection.SIG_MCEL_CV_STATUS,
@@ -124,7 +125,7 @@
                                 description: ""),
 
                     new SignalItem(
-                                name: SignalCollection.SIG_MCEL_OE_STATUS,
+                                name: SignalCollection.SIG_MCEL_CC_STATUS,
                                 msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_STATUS),
                                 defaultValue: "0",
                                 type: "UNSIGNED",
@@ -133,7 +134,7 @@
                                 description: ""),
 
                     new SignalItem(
-                                name: SignalCollection.SIG_MCEL_RUN_TIME_TICK,
+                                name: SignalCollection.SIG_MCEL_UPTIME,
                                 msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_LIVE),
                                 defaultValue: "0",
                                 type: "UNSIGNED",
@@ -176,9 +177,9 @@
         /// <summary>
         /// Egy signal küldése
         /// </summary>
-        public static CanMsg MakeMessage(byte nodeId, SignalItem signal, string value, bool broadcast, byte devId)
+        public static CanMsg MakeMessage(byte nodeTypeId, byte nodeAddress, bool broadcast, SignalItem signal, string value)
         {
-            uint arbId = (uint)(nodeId << 24 | devId << 16 | signal.Message.Id << 8);
+            uint arbId = (uint)(nodeTypeId << 24 | nodeAddress << 16 | signal.Message.Id << 8);
             if (broadcast)
                 arbId |= 0x1;
 
@@ -213,14 +214,9 @@
             return new CanMsg(arbId, BitConverter.GetBytes(signal.Message.Value));
         }
 
-        public static byte GetNodeId(uint arbId)
+        public static byte GetNodeTypeId(uint arbId)
         {
             return (byte)((arbId & 0x0F000000) >> 24);
-        }
-
-        public static byte GetMsgId(uint arbId)
-        {
-            return (byte)((arbId & 0x0000FF00) >> 8);
         }
 
         public static byte GetNodeAddress(uint arbId)
@@ -228,24 +224,29 @@
             return (byte)((arbId & 0x00FF0000) >> 16);
         }
 
-        public float GetValueFloat(SignalItem signal, byte[] data)
+        public static byte GetMsgId(uint arbId)
+        {
+            return (byte)((arbId & 0x0000FF00) >> 8);
+        }
+
+        public static float GetSingle(SignalItem signal, byte[] data)
         {
             return BitConverter.ToSingle(data, signal.StartBit / 8);
         }
 
-        public byte GetValueU8(SignalItem signal, byte[] data)
+        public static byte GetUInt8(SignalItem signal, byte[] data)
         {
             return data[signal.StartBit / 8];
         }
 
-        public bool GetValueBool(SignalItem signal, byte[] data)
+        public static bool GetBool(SignalItem signal, byte[] data)
         {
             ulong v64 = BitConverter.ToUInt64(data, 0);
             ulong mask = (ulong)1 << signal.StartBit;
-            return (v64 & mask) == v64;
+            return (v64 & mask) == mask;
         }
 
-        public ulong GetValueU64(SignalItem signal, byte[] data)
+        public static ulong GetUInt64(SignalItem signal, byte[] data)
         {
             return BitConverter.ToUInt64(data,0);
         }

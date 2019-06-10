@@ -12,9 +12,10 @@ namespace Konvolucio.MCEL181123
     using System.Windows.Forms;
     using View;
     using Database;
+    using Common;
+    using Properties;
 
-
-    public interface IMainForm
+    public interface IMainForm : IWindowLayoutRestoring 
     {
 
         event EventHandler Shown;
@@ -72,9 +73,24 @@ namespace Konvolucio.MCEL181123
             columnVmeas.ToolTipText = CanDb.Instance.Signals.FirstOrDefault(n => n.Name == SignalCollection.SIG_MCEL_V_MEAS).Description;
         }
 
-        private void powerControl1_Load(object sender, EventArgs e)
+        public void LayoutSave()
         {
+            Settings.Default.MainFormLocation = Location;
+            Settings.Default.MainFormWindowState = WindowState;
+            Settings.Default.MainFormSize = Size;
+            Settings.Default.MainTree_SplitterDistance = splitContainer1.SplitterDistance;
 
         }
+
+        public void LayoutRestore()
+        {
+            Location = Settings.Default.MainFormLocation;
+            WindowState = Settings.Default.MainFormWindowState;
+            Size = Settings.Default.MainFormSize;
+            splitContainer1.SplitterDistance = Settings.Default.MainTree_SplitterDistance;
+
+
+        }
+
     }
 }

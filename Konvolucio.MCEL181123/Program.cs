@@ -12,7 +12,9 @@ namespace Konvolucio.MCEL181123
     using Properties;
     using Events;
     using Database;
-
+    using System.ComponentModel;
+    using Common;
+    using System.Reflection;
 
     static class Program
     {
@@ -42,7 +44,19 @@ namespace Konvolucio.MCEL181123
         private readonly TreeNode _startTreeNode;
 
         public App()
-        { 
+        {
+
+
+            /*** Application Settings Upgrade ***/
+            if (Settings.Default.ApplictionSettingsSaveCounter == 0)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.ApplictionSettingsUpgradeCounter++;
+            }
+            Settings.Default.ApplictionSettingsSaveCounter++;
+            Settings.Default.PropertyChanged += new PropertyChangedEventHandler(Settings_PropertyChanged);
+
+
             /*** Main Form ***/
             _mainForm = new MainForm();
             _mainForm.Text = AppConstants.SoftwareTitle + " - " + Application.ProductVersion;
@@ -59,10 +73,10 @@ namespace Konvolucio.MCEL181123
             _ioService.Stopped += IoService_Stopped;
 
             /*** TimerService ***/
-            TimerService.Instance.Interval = 1000;
+            TimerService.Instance.Interval = Settings.Default.GuiRefreshRateMs;
 
-            #region MenuBar    
-            /* Menu Bar */
+            /*** Menu Bar ***/ 
+            #region MenuBar      
             var configMenu = new ToolStripMenuItem("Config");
             configMenu.DropDown.Items.AddRange(
                 new ToolStripItem[]
@@ -96,10 +110,10 @@ namespace Konvolucio.MCEL181123
                 };
             #endregion
 
+            /*** SendView ***/
             #region SendView
-
             var sendView = _mainForm.SendView;
-            sendView.Signals = CanDb.Instance.Signals.Where(n => n.Message.Node.Name == NodeCollection.NODE_PC ).Select(n=>n.Name).ToArray();
+            sendView.Signals = CanDb.Instance.Signals.Where(n => n.Message.TxNode.Name == NodeCollection.NODE_PC ).Select(n=>n.Name).ToArray();
             sendView.SelectedSignalChanged += (o, s) =>
             {
                 sendView.Value = CanDb.Instance.Signals.FirstOrDefault(n => n.Name == sendView.SelectedSignal).DefaultValue;
@@ -108,17 +122,20 @@ namespace Konvolucio.MCEL181123
             {
               var msg = CanDb.MakeMessage
                 (
-                    nodeId: 0x05,
-                    signal: CanDb.Instance.Signals.FirstOrDefault(n => n.Name == sendView.SelectedSignal),
-                    value: sendView.Value,
+                    nodeTypeId: CanDb.Instance.Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_PC).NodeTypeId,
+                    nodeAddress: sendView.Address,
                     broadcast: sendView.Broadcast,
-                    devId: sendView.Address
+                    signal: CanDb.Instance.Signals.FirstOrDefault(n => n.Name == sendView.SelectedSignal),
+                    value: sendView.Value
+                    
+                    
                 );
 
                 _ioService.TxQueue.Enqueue(msg);
             };
             #endregion
 
+            /*** Tree ***/
             #region Tree
             _mainForm.Tree.AfterSelect += Tree_AfterSelect;
             _mainForm.Tree.Nodes.AddRange(
@@ -132,7 +149,7 @@ namespace Konvolucio.MCEL181123
                         new View.TreeNodes.RxFramesTreeNode(_ioService),
                         new View.TreeNodes.TxFramesTreeNode(_ioService),
                         new View.TreeNodes.WaitForTxTreeNode(_ioService),
-                        new View.TreeNodes.CanFrameLogTreeNode()
+                        new View.TreeNodes.IoLogTreeNode()
                     });
 
             _mainForm.Tree.ContextMenuStrip = new ContextMenuStrip();
@@ -145,16 +162,12 @@ namespace Konvolucio.MCEL181123
 
             #endregion
 
-            #region DataGrid
-
+            /*** DataGrid ***/
             var grid = _mainForm.DataGrid;
             grid.DataSource = _explorer.Devices;
-           
-            #endregion
-
+          
+            /*** StatusBar ***/    
             #region StatusBar
-
-            /* StatusBar */
             _mainForm.StatusBar = new ToolStripItem[]
             {
                 new StatusBar.WaitForParseFramesStatus(_ioService),
@@ -164,10 +177,9 @@ namespace Konvolucio.MCEL181123
                 new StatusBar.VersionStatus(),
                 new StatusBar.LogoStatus(),
             };
-
             #endregion
 
-            /* Run */
+            /*** Run ***/
             Application.Run((MainForm)_mainForm);
         }
 
@@ -192,12 +204,13 @@ namespace Konvolucio.MCEL181123
         void MainForm_Shown(object sender, EventArgs e)
         {
 #if TRACE
-            Debug.WriteLine(this.GetType().Namespace + "." + this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "()");
+            Debug.WriteLine(GetType().Namespace + "." + GetType().Name + "." + MethodBase.GetCurrentMethod().Name + "()");
 #endif
 
             SyncContext = SynchronizationContext.Current;
+            _mainForm.LayoutRestore();
 
-            /*Megnyitást követően rá áll az Adapter Nódra a TreeView-ban.*/
+            /* Megnyitást követően rá áll az Adapter Nódra a TreeView-ban.*/
             _mainForm.Tree.Nodes[0].ExpandAll();
             _mainForm.Tree.SelectedNode = _startTreeNode;
 
@@ -209,31 +222,44 @@ namespace Konvolucio.MCEL181123
 
             EventAggregator.Instance.Publish(new ShowAppEvent());
 
+           // if (Settings.Default.PlayAfterStartUp)
+                _ioService.Play();
         }
 
         public void Start(string[] args)
         {
 #if TRACE
-            Debug.WriteLine(this.GetType().Namespace + "." + this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + ": " + string.Join("\r\n -", args));
+            Debug.WriteLine(GetType().Namespace + "." + GetType().Name + "." + MethodBase.GetCurrentMethod().Name + ": " + string.Join("\r\n -", args));
 #endif
         }
 
         void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
 #if TRACE
-            Debug.WriteLine(this.GetType().Namespace + "." + this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "()");
+            Debug.WriteLine(GetType().Namespace + "." + GetType().Name + "." +MethodBase.GetCurrentMethod().Name + "()");
 #endif
         }
 
         void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
 #if TRACE
-            Debug.WriteLine(this.GetType().Namespace + "." + this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "()");
+            Debug.WriteLine(GetType().Namespace + "." + GetType().Name + "." + MethodBase.GetCurrentMethod().Name + "()");
 #endif
             _ioService.Dispose();
+            _mainForm.LayoutSave();
+            Settings.Default.Save();
             EventAggregator.Instance.Dispose();
             Settings.Default.Save();
+        }
 
+        void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Debug.WriteLine(GetType().Namespace + "." + GetType().Name + "." + MethodBase.GetCurrentMethod().Name + "(): " + e.PropertyName + ", NewValue: " + Settings.Default[e.PropertyName]);
+
+            if (e.PropertyName == Tools.GetPropertyName(() => Settings.Default.GuiRefreshRateMs))
+            {
+                TimerService.Instance.Interval = Settings.Default.GuiRefreshRateMs;
+            }
         }
 
     }

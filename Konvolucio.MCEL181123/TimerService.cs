@@ -54,8 +54,7 @@
 
         void Update(object sender, EventArgs e)
         {
-            if(Tick!=null)
-                Tick(this,EventArgs.Empty);
+             Tick?.Invoke(this,EventArgs.Empty);
         }
 
         public void Dispose()

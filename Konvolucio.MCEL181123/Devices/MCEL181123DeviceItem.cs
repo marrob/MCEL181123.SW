@@ -41,16 +41,16 @@ namespace Konvolucio.MCEL181123.Devices
         public void Update(byte msgId, byte[] data)
         {
             LastRxTimeStamp = DateTime.Now;
-            var mcelSingals = CanDb.Instance.Signals.Where(n => n.Message.Node.Name == NodeCollection.NODE_MCEL).Select(n => n);
+            var mcelSingals = CanDb.Instance.Signals.Where(n => n.Message.TxNode.Name == NodeCollection.NODE_MCEL).Select(n => n);
 
-            Debug.WriteLine(string.Join("\r\n", mcelSingals.Select(n => n.Name)));
+            //Debug.WriteLine(string.Join("\r\n", mcelSingals.Select(n => n.Name)));
 
             switch (msgId)
             {
                     case MessageCollection.MSG_MCEL_V_MEAS_ID:
                     {
                         var signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_V_MEAS));
-                        SIG_MCEL_V_MEAS = CanDb.Instance.GetValueFloat(signal, data);
+                        SIG_MCEL_V_MEAS = CanDb.GetSingle(signal, data);
                         OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_V_MEAS));
                         break;
                     }
@@ -58,11 +58,11 @@ namespace Konvolucio.MCEL181123.Devices
                 case MessageCollection.MSG_MCEL_C_MEAS_ID:
                     {
                         var signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_C_RANGE));
-                        SIG_MCEL_C_RANGE = CanDb.Instance.GetValueU8(signal, data);
+                        SIG_MCEL_C_RANGE = CanDb.GetUInt8(signal, data);
                         OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_C_RANGE));
 
                         signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_C_MEAS));
-                        SIG_MCEL_C_MEAS = CanDb.Instance.GetValueFloat(signal, data);
+                        SIG_MCEL_C_MEAS = CanDb.GetSingle(signal, data);
                         OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_C_MEAS));
                         break;
                     }
@@ -70,15 +70,15 @@ namespace Konvolucio.MCEL181123.Devices
                 case MessageCollection.MSG_MCEL_STATUS_ID:
                     {
                         var signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_CC_STATUS));
-                        SIG_MCEL_CC_STATUS = CanDb.Instance.GetValueBool(signal, data);
+                        SIG_MCEL_CC_STATUS = CanDb.GetBool(signal, data);
                         OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_CC_STATUS));
 
                         signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_CV_STATUS));
-                        SIG_MCEL_CV_STATUS = CanDb.Instance.GetValueBool(signal, data);
+                        SIG_MCEL_CV_STATUS = CanDb.GetBool(signal, data);
                         OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_CV_STATUS));
 
                         signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_OE_STATUS));
-                        SIG_MCEL_OE_STATUS = CanDb.Instance.GetValueBool(signal, data);
+                        SIG_MCEL_OE_STATUS = CanDb.GetBool(signal, data);
                         OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_OE_STATUS));
                         break;
                     }
@@ -86,7 +86,7 @@ namespace Konvolucio.MCEL181123.Devices
                 case MessageCollection.MSG_MCEL_LIVE_ID:
                     {
                         var signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_RUN_TIME_TICK));
-                        SIG_MCEL_RUN_TIME_TICK = CanDb.Instance.GetValueU8(signal, data);
+                        SIG_MCEL_RUN_TIME_TICK = CanDb.GetUInt64(signal, data);
                         OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_RUN_TIME_TICK));
                         break;
                     }

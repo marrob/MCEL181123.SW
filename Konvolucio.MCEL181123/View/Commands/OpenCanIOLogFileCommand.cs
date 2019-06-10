@@ -20,7 +20,7 @@ namespace Konvolucio.MCEL181123.View.Commands
 
             EventAggregator.Instance.Subscribe<TreeNodeChangedAppEvent>(e =>
             {
-                Visible = (e.SelectedNode is CanFrameLogTreeNode);
+                Visible = (e.SelectedNode is IoLogTreeNode);
             });
         }
 
@@ -28,7 +28,7 @@ namespace Konvolucio.MCEL181123.View.Commands
         {
             base.OnClick(e);
             var myProcess = new Process();
-            myProcess.StartInfo.Arguments = "\"" + CanIoLog.Instance.Path + "\"";
+            myProcess.StartInfo.Arguments = "\"" + IoLog.Instance.Path + "\"";
             myProcess.StartInfo.FileName = "Notepad++";
             try
             {
