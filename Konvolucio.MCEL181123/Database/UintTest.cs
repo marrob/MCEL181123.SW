@@ -42,12 +42,12 @@ namespace Konvolucio.MCEL181123.Database
                         new MessageItem(
                             name:"MSG_MEAS",
                             id:0x02,
-                            txNode: nodes.FirstOrDefault(n=>n.Name == "MCEL181123")
+                            nodeType: nodes.FirstOrDefault(n=>n.Name == "MCEL181123")
                             ),
                         new MessageItem(
                             name:"MSG_MCEL_CV_SET",
                             id:0x03,
-                            txNode: nodes.FirstOrDefault(n=>n.Name == "MCEL181123")
+                            nodeType: nodes.FirstOrDefault(n=>n.Name == "MCEL181123")
                             ),
                     }
                 );

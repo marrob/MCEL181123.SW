@@ -10,9 +10,10 @@ namespace Konvolucio.MCEL181123.View
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Forms;
+    using Common;
+    using Properties;
 
-
-    public interface ISignalSendView
+    public interface ISignalSendView 
     {
         bool Broadcast { set; get; }
         byte Address { get; set; }
@@ -24,7 +25,7 @@ namespace Konvolucio.MCEL181123.View
     }
 
 
-    public partial class SignalSendViewControl : UserControl, ISignalSendView
+    public partial class SignalSendViewControl : UserControl, ISignalSendView ,IWindowLayoutRestoring
     {
         public bool Broadcast
         { 
@@ -111,6 +112,25 @@ namespace Konvolucio.MCEL181123.View
                 numericUpDownRack.Enabled = true;
             }
 
+        }
+
+        public void LayoutSave()
+        {
+            Settings.Default.SendViewScope = comboBoxScope.Text;
+            Settings.Default.SendViewRack = (int)numericUpDownRack.Value;
+            Settings.Default.SendViewModul = (int)numericUpDownModul.Value;
+            Settings.Default.SendViewName = comboBoxSignal.Text ;
+            Settings.Default.SendViewValue = textBoxValue.Text;
+
+        }
+
+        public void LayoutRestore()
+        {
+            comboBoxScope.Text = Settings.Default.SendViewScope;
+            numericUpDownRack.Value = Settings.Default.SendViewRack;
+            numericUpDownModul.Value = Settings.Default.SendViewModul;
+            comboBoxSignal.Text = Settings.Default.SendViewName;
+            textBoxValue.Text = Settings.Default.SendViewValue;
         }
     }
 }

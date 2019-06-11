@@ -16,6 +16,7 @@
         public const string SIG_MCEL_CC_STATUS = "SIG_MCEL_CC_STATUS";
 
         public const string SIG_MCEL_UPTIME = "SIG_MCEL_RUN_TIME_TICK";
+        public const string SIG_MCEL_VERSION = "SIG_MCEL_VERSION";
 
         /*** Tx By PC ***/
         public const string SIG_PC_CV_SET = "SIG_PC_CV_SET";

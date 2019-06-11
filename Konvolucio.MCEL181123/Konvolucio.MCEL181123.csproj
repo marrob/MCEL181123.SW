@@ -36,13 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NationalInstruments.Common, Version=19.0.40.49152, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NationalInstruments.UI, Version=19.0.45.49154, Culture=neutral, PublicKeyToken=4febd62461bf11a4, processorArchitecture=MSIL">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NationalInstruments.UI.WindowsForms, Version=19.0.45.49154, Culture=neutral, PublicKeyToken=4febd62461bf11a4, processorArchitecture=MSIL" />
     <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
@@ -133,6 +126,9 @@
     </Compile>
     <Compile Include="TimerService.cs" />
     <Compile Include="Database\UintTest.cs" />
+    <Compile Include="View\Commands\OpenExplorerCanIOLogFileCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\Commands\OpenCanIOLogFileCommand.cs">
       <SubType>Component</SubType>
     </Compile>

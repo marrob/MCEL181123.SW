@@ -23,7 +23,9 @@ namespace Konvolucio.MCEL181123.Devices
         public bool SIG_MCEL_OE_STATUS { get; private set; }
         public bool SIG_MCEL_CC_STATUS { get; private set; }
         public bool SIG_MCEL_CV_STATUS { get; private set; }
-        public ulong SIG_MCEL_RUN_TIME_TICK { get; private set; }
+        public uint SIG_MCEL_RUN_TIME_TICK { get; private set; }
+
+        public uint SIG_MCEL_VERSION { get; private set; }
 
         public DateTime LastRxTimeStamp { get; private set; }
 
@@ -41,7 +43,7 @@ namespace Konvolucio.MCEL181123.Devices
         public void Update(byte msgId, byte[] data)
         {
             LastRxTimeStamp = DateTime.Now;
-            var mcelSingals = CanDb.Instance.Signals.Where(n => n.Message.TxNode.Name == NodeCollection.NODE_MCEL).Select(n => n);
+            var mcelSingals = CanDb.Instance.Signals.Where(n => n.Message.NodeType.Name == NodeCollection.NODE_MCEL).Select(n => n);
 
             //Debug.WriteLine(string.Join("\r\n", mcelSingals.Select(n => n.Name)));
 
@@ -86,10 +88,16 @@ namespace Konvolucio.MCEL181123.Devices
                 case MessageCollection.MSG_MCEL_LIVE_ID:
                     {
                         var signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_RUN_TIME_TICK));
-                        SIG_MCEL_RUN_TIME_TICK = CanDb.GetUInt64(signal, data);
+                        SIG_MCEL_RUN_TIME_TICK = CanDb.GetUInt32(signal, data);
                         OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_RUN_TIME_TICK));
+
+                        signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_VERSION));
+                        SIG_MCEL_VERSION = CanDb.GetUInt32(signal, data);
+                        OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_VERSION));
                         break;
                     }
+
+
                 default:
                     {
                         throw new ApplicationException("Unknown message Id");

@@ -178,5 +178,65 @@ namespace Konvolucio.MCEL181123.Properties {
                 this["GuiRefreshRateMs"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SendViewScope {
+            get {
+                return ((string)(this["SendViewScope"]));
+            }
+            set {
+                this["SendViewScope"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int SendViewRack {
+            get {
+                return ((int)(this["SendViewRack"]));
+            }
+            set {
+                this["SendViewRack"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int SendViewModul {
+            get {
+                return ((int)(this["SendViewModul"]));
+            }
+            set {
+                this["SendViewModul"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SendViewName {
+            get {
+                return ((string)(this["SendViewName"]));
+            }
+            set {
+                this["SendViewName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public string SendViewValue {
+            get {
+                return ((string)(this["SendViewValue"]));
+            }
+            set {
+                this["SendViewValue"] = value;
+            }
+        }
     }
 }

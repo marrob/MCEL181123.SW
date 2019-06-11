@@ -58,8 +58,6 @@ namespace Konvolucio.MCEL181123
 
         public void Log()
         {
-            string sep = ",";
-
             foreach (MCEL181123DeviceItem dev in Devices)
             {
                 string path = "MCEL_" + dev.Address.ToString("X2") + "_" + StartTimeSamp.ToString(AppConstants.FileNameTimestampFormat)+".csv";

@@ -80,6 +80,8 @@ namespace Konvolucio.MCEL181123
             Settings.Default.MainFormSize = Size;
             Settings.Default.MainTree_SplitterDistance = splitContainer1.SplitterDistance;
 
+            signalSendViewControl1.LayoutSave();
+
         }
 
         public void LayoutRestore()
@@ -89,6 +91,7 @@ namespace Konvolucio.MCEL181123
             Size = Settings.Default.MainFormSize;
             splitContainer1.SplitterDistance = Settings.Default.MainTree_SplitterDistance;
 
+            signalSendViewControl1.LayoutRestore();
 
         }
 

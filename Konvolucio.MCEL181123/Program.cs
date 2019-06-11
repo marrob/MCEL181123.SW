@@ -113,7 +113,7 @@ namespace Konvolucio.MCEL181123
             /*** SendView ***/
             #region SendView
             var sendView = _mainForm.SendView;
-            sendView.Signals = CanDb.Instance.Signals.Where(n => n.Message.TxNode.Name == NodeCollection.NODE_PC ).Select(n=>n.Name).ToArray();
+            sendView.Signals = CanDb.Instance.Signals.Where(n => n.Message.NodeType.Name == NodeCollection.NODE_PC ).Select(n=>n.Name).ToArray();
             sendView.SelectedSignalChanged += (o, s) =>
             {
                 sendView.Value = CanDb.Instance.Signals.FirstOrDefault(n => n.Name == sendView.SelectedSignal).DefaultValue;
@@ -157,7 +157,8 @@ namespace Konvolucio.MCEL181123
                 new ToolStripItem[]
                 {
                     new View.Commands.OpenCanIOLogFileCommand(),
-                    new View.Commands.DeleteCanIOLogFileCommand()
+                    new View.Commands.DeleteCanIOLogFileCommand(),
+                    new View.Commands.OpenExplorerCanIOLogFileCommand(),
                 });
 
             #endregion

@@ -14,6 +14,7 @@
         public string Type { get; set; }
         public int StartBit { get; set; }
         public int Bits { get; set; }
+       
         public string Description { get; set; }
 
         public SignalItem() { }

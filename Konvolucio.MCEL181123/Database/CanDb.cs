@@ -35,38 +35,40 @@
                     new MessageItem(
                         name:MessageCollection.MSG_MCEL_V_MEAS,
                         id:MessageCollection.MSG_MCEL_V_MEAS_ID,
-                        txNode: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
+                        nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
                         ),
 
                     new MessageItem(
                         name:MessageCollection.MSG_MCEL_C_MEAS,
                         id:MessageCollection.MSG_MCEL_C_MEAS_ID,
-                        txNode: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
+                        nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
                         ),
 
                     new MessageItem(
                         name:MessageCollection.MSG_MCEL_STATUS,
                         id:MessageCollection.MSG_MCEL_STATUS_ID,
-                        txNode: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
+                        nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
                         ),
 
                     new MessageItem(
                         name:MessageCollection.MSG_MCEL_LIVE,
                         id:MessageCollection.MSG_MCEL_LIVE_ID,
-                        txNode: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
+                        nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
                         ),
-                    
+
                     /*** PC Messages ***/
                     new MessageItem(
-                        name:MessageCollection.MSG_PC_CC_SET,
-                        id:0x02,
-                        txNode: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_PC)
-                        ),
-                    new MessageItem(
                         name:MessageCollection.MSG_PC_CV_SET,
-                        id:0x03,
-                        txNode: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_PC)
+                        id:MessageCollection.MSG_PC_CV_SET_ID,
+                        nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_PC)
                         ),
+
+                    new MessageItem(
+                        name:MessageCollection.MSG_PC_CC_SET,
+                        id:MessageCollection.MSG_PC_CC_SET_ID,
+                        nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_PC)
+                        ),
+
 
 
                 }
@@ -84,7 +86,7 @@
                                 defaultValue: "0.00",
                                 type: "FLOAT",
                                 startBit: 0,
-                                bits: 31,
+                                bits: 32,
                                 description: "Mért feszültség."),
 
                     new SignalItem(
@@ -139,8 +141,18 @@
                                 defaultValue: "0",
                                 type: "UNSIGNED",
                                 startBit: 0,
-                                bits: 63,
+                                bits: 32,
                                 description: ""),
+
+                    new SignalItem(
+                                name: SignalCollection.SIG_MCEL_VERSION,
+                                msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_LIVE),
+                                defaultValue: "0",
+                                type: "UNSIGNED",
+                                startBit: 32,
+                                bits: 32,
+                                description: ""),
+
 
                     /*** Tx By PC ***/
                     new SignalItem(
@@ -158,7 +170,7 @@
                                 defaultValue: "0.00",
                                 type: "FLOAT",
                                 startBit: 0,
-                                bits: 31,
+                                bits: 32,
                                 description: "Constant Current értékét."),
 
 
@@ -229,15 +241,6 @@
             return (byte)((arbId & 0x0000FF00) >> 8);
         }
 
-        public static float GetSingle(SignalItem signal, byte[] data)
-        {
-            return BitConverter.ToSingle(data, signal.StartBit / 8);
-        }
-
-        public static byte GetUInt8(SignalItem signal, byte[] data)
-        {
-            return data[signal.StartBit / 8];
-        }
 
         public static bool GetBool(SignalItem signal, byte[] data)
         {
@@ -246,9 +249,26 @@
             return (v64 & mask) == mask;
         }
 
+        public static byte GetUInt8(SignalItem signal, byte[] data)
+        {
+            ulong v64 = BitConverter.ToUInt64(data, 0);
+            return (byte)(v64 >> signal.StartBit);
+        }
+
+        public static float GetSingle(SignalItem signal, byte[] data)
+        {
+            return BitConverter.ToSingle(data, signal.StartBit / 8);
+        }
+
+        public static uint GetUInt32(SignalItem signal, byte[] data)
+        {
+            ulong v64 = BitConverter.ToUInt64(data, 0);
+            return (uint) (v64 >> signal.StartBit);
+        }
+
         public static ulong GetUInt64(SignalItem signal, byte[] data)
         {
-            return BitConverter.ToUInt64(data,0);
+            return BitConverter.ToUInt64(data, 0);
         }
 
     }
