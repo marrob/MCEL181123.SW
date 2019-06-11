@@ -135,6 +135,7 @@
     <Compile Include="View\Commands\DeleteCanIOLogFileCommand.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="View\TreeNodes\MeasLogTreeNode.cs" />
     <Compile Include="View\TreeNodes\IoLogTreeNode.cs" />
     <Compile Include="View\TreeNodes\ModulsTreeNode.cs" />
     <Compile Include="View\TreeNodes\RacksTreeNode.cs" />
