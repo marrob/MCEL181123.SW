@@ -47,6 +47,8 @@
             this.columnStatusOe = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.coulmnStatusCv = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.coulmnStatusCc = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.coulmnUcTemp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnTrTemp = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.coulmnRunTimeTick = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
@@ -153,6 +155,8 @@
             this.columnStatusOe,
             this.coulmnStatusCv,
             this.coulmnStatusCc,
+            this.coulmnUcTemp,
+            this.columnTrTemp,
             this.coulmnRunTimeTick,
             this.columnVersion});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -239,6 +243,18 @@
             this.coulmnStatusCc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.coulmnStatusCc.Width = 50;
             // 
+            // coulmnUcTemp
+            // 
+            this.coulmnUcTemp.DataPropertyName = "SIG_MCEL_UC_TEMP";
+            this.coulmnUcTemp.HeaderText = "uC Temp [°C]";
+            this.coulmnUcTemp.Name = "coulmnUcTemp";
+            // 
+            // columnTrTemp
+            // 
+            this.columnTrTemp.DataPropertyName = "SIG_MCEL_TR_TEMP";
+            this.columnTrTemp.HeaderText = "Tr Temp [°C]";
+            this.columnTrTemp.Name = "columnTrTemp";
+            // 
             // coulmnRunTimeTick
             // 
             this.coulmnRunTimeTick.DataPropertyName = "SIG_MCEL_RUN_TIME_TICK";
@@ -298,6 +314,8 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn columnStatusOe;
         private System.Windows.Forms.DataGridViewCheckBoxColumn coulmnStatusCv;
         private System.Windows.Forms.DataGridViewCheckBoxColumn coulmnStatusCc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn coulmnUcTemp;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnTrTemp;
         private System.Windows.Forms.DataGridViewTextBoxColumn coulmnRunTimeTick;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnVersion;
     }

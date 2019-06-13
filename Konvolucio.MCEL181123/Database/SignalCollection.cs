@@ -14,6 +14,8 @@
         public const string SIG_MCEL_OE_STATUS = "SIG_MCEL_OE_STATUS";
         public const string SIG_MCEL_CV_STATUS = "SIG_MCEL_CV_STATUS";
         public const string SIG_MCEL_CC_STATUS = "SIG_MCEL_CC_STATUS";
+        public const string SIG_MCEL_UC_TEMP = "SIG_MCEL_UC_TEMP";
+        public const string SIG_MCEL_TR_TEMP = "SIG_MCEL_TR_TEMP";
 
         public const string SIG_MCEL_UPTIME = "SIG_MCEL_RUN_TIME_TICK";
         public const string SIG_MCEL_VERSION = "SIG_MCEL_VERSION";

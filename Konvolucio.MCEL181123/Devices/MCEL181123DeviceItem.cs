@@ -23,10 +23,11 @@ namespace Konvolucio.MCEL181123.Devices
         public bool SIG_MCEL_OE_STATUS { get; private set; }
         public bool SIG_MCEL_CC_STATUS { get; private set; }
         public bool SIG_MCEL_CV_STATUS { get; private set; }
+        public float SIG_MCEL_UC_TEMP { get; private set; }
+        public float SIG_MCEL_TR_TEMP { get; private set; }
+
         public uint SIG_MCEL_RUN_TIME_TICK { get; private set; }
-
         public uint SIG_MCEL_VERSION { get; private set; }
-
         public DateTime LastRxTimeStamp { get; private set; }
 
         public MCEL181123DeviceItem() { }
@@ -82,6 +83,18 @@ namespace Konvolucio.MCEL181123.Devices
                         signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_OE_STATUS));
                         SIG_MCEL_OE_STATUS = CanDb.GetBool(signal, data);
                         OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_OE_STATUS));
+                        break;
+                    }
+                case MessageCollection.MSG_MCEL_TEMPS_ID:
+                    {
+                        var signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_UC_TEMP));
+                        SIG_MCEL_UC_TEMP = CanDb.GetSingle(signal, data);
+                        OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_UC_TEMP));
+
+                        signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_TR_TEMP));
+                        SIG_MCEL_TR_TEMP = CanDb.GetSingle(signal, data);
+                        OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_TR_TEMP));
+
                         break;
                     }
 

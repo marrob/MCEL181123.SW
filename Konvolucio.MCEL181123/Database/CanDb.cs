@@ -51,6 +51,12 @@
                         ),
 
                     new MessageItem(
+                        name:MessageCollection.MSG_MCEL_TEMPS,
+                        id:MessageCollection.MSG_MCEL_TEMPS_ID,
+                        nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
+                        ),
+
+                    new MessageItem(
                         name:MessageCollection.MSG_MCEL_LIVE,
                         id:MessageCollection.MSG_MCEL_LIVE_ID,
                         nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
@@ -129,6 +135,24 @@
                     new SignalItem(
                                 name: SignalCollection.SIG_MCEL_CC_STATUS,
                                 msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_STATUS),
+                                defaultValue: "0",
+                                type: "UNSIGNED",
+                                startBit: 2,
+                                bits: 1,
+                                description: ""),
+
+                    new SignalItem(
+                                name: SignalCollection.SIG_MCEL_UC_TEMP,
+                                msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_TEMPS),
+                                defaultValue: "0",
+                                type: "UNSIGNED",
+                                startBit: 2,
+                                bits: 1,
+                                description: ""),
+
+                     new SignalItem(
+                                name: SignalCollection.SIG_MCEL_TR_TEMP,
+                                msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_TEMPS),
                                 defaultValue: "0",
                                 type: "UNSIGNED",
                                 startBit: 2,
