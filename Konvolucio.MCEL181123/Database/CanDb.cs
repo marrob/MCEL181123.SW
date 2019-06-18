@@ -57,6 +57,12 @@
                         ),
 
                     new MessageItem(
+                        name:MessageCollection.MSG_MCEL_NET_MON,
+                        id:MessageCollection.MSG_MCEL_NET_MON_ID,
+                        nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
+                        ),
+
+                    new MessageItem(
                         name:MessageCollection.MSG_MCEL_LIVE,
                         id:MessageCollection.MSG_MCEL_LIVE_ID,
                         nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_MCEL)
@@ -75,7 +81,17 @@
                         nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_PC)
                         ),
 
+                    new MessageItem(
+                        name:MessageCollection.MSG_PC_CAILB_SET,
+                        id:MessageCollection.MSG_PC_CAILB_SET_ID,
+                        nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_PC)
+                        ),
 
+                    new MessageItem(
+                        name:MessageCollection.MSG_PC_NET_TEST,
+                        id:MessageCollection.MSG_PC_NET_TEST_ID,
+                        nodeType: Nodes.FirstOrDefault(n=>n.Name == NodeCollection.NODE_PC)
+                        ),
 
                 }
             );
@@ -146,8 +162,8 @@
                                 msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_TEMPS),
                                 defaultValue: "0",
                                 type: "UNSIGNED",
-                                startBit: 2,
-                                bits: 1,
+                                startBit: 0,
+                                bits: 32,
                                 description: ""),
 
                      new SignalItem(
@@ -155,8 +171,37 @@
                                 msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_TEMPS),
                                 defaultValue: "0",
                                 type: "UNSIGNED",
-                                startBit: 2,
-                                bits: 1,
+                                startBit: 32,
+                                bits: 32,
+                                description: ""),
+
+
+
+                     new SignalItem(
+                                name: SignalCollection.SIG_MCEL_RXERRCNT,
+                                msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_NET_MON),
+                                defaultValue: "0",
+                                type: "UNSIGNED",
+                                startBit: 0,
+                                bits: 8,
+                                description: ""),
+
+                     new SignalItem(
+                                name: SignalCollection.SIG_MCEL_TXERRCNT,
+                                msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_NET_MON),
+                                defaultValue: "0",
+                                type: "UNSIGNED",
+                                startBit: 8,
+                                bits: 8,
+                                description: ""),
+
+                     new SignalItem(
+                                name: SignalCollection.SIG_MCEL_RXTESTCNT,
+                                msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_MCEL_NET_MON),
+                                defaultValue: "0",
+                                type: "UNSIGNED",
+                                startBit: 16,
+                                bits: 16,
                                 description: ""),
 
                     new SignalItem(
@@ -205,7 +250,27 @@
                                 type: "UNSIGNED",
                                 startBit: 32,
                                 bits: 8,
-                                description: "Árammérés méréshatárának értékét.")
+                                description: "Árammérés méréshatárának értékét."),
+
+                     new SignalItem(
+                                name: SignalCollection.SIG_PC_CLB_MD_SET,
+                                msg: Messages.FirstOrDefault(n=>n.Name == MessageCollection.MSG_PC_CAILB_SET),
+                                defaultValue: "0",
+                                type: "UNSIGNED",
+                                startBit: 0,
+                                bits: 8,
+                                description: ""),
+
+                    new SignalItem(
+                                name: SignalCollection.SIG_PC_INC_RX_CNT_TRG,
+                                msg: Messages.FirstOrDefault(n=>n.Name ==  MessageCollection.MSG_PC_NET_TEST),
+                                defaultValue: "0",
+                                type: "UNSIGNED",
+                                startBit: 32,
+                                bits: 8,
+                                description: "Árammérés méréshatárának értékét."),
+
+
                 }
             );
         }

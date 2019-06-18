@@ -26,6 +26,10 @@ namespace Konvolucio.MCEL181123.Devices
         public float SIG_MCEL_UC_TEMP { get; private set; }
         public float SIG_MCEL_TR_TEMP { get; private set; }
 
+        public int SIG_MCEL_RXERRCNT { get; private set; }
+        public int SIG_MCEL_TXERRCNT { get; private set; }
+        public int SIG_MCEL_RXTESTCNT { get; private set; }
+
         public uint SIG_MCEL_RUN_TIME_TICK { get; private set; }
         public uint SIG_MCEL_VERSION { get; private set; }
         public DateTime LastRxTimeStamp { get; private set; }
@@ -110,10 +114,28 @@ namespace Konvolucio.MCEL181123.Devices
                         break;
                     }
 
+                case MessageCollection.MSG_MCEL_NET_MON_ID:
+                    {
+                        var signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_RXERRCNT));
+                        SIG_MCEL_RXERRCNT = CanDb.GetUInt8(signal, data);
+                        OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_RXERRCNT));
+
+                        signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_TXERRCNT));
+                        SIG_MCEL_TXERRCNT = CanDb.GetUInt8(signal, data);
+                        OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_TXERRCNT));
+
+                        signal = mcelSingals.FirstOrDefault(n => n.Name == Tools.GetPropertyName(() => SIG_MCEL_RXTESTCNT));
+                        SIG_MCEL_RXTESTCNT = CanDb.GetUInt8(signal, data);
+                        OnProppertyChanged(Tools.GetPropertyName(() => SIG_MCEL_RXTESTCNT));
+                        break;
+                    }
+
+
 
                 default:
                     {
-                        throw new ApplicationException("Unknown message Id");
+                        //throw new ApplicationException("Unknown message Id");
+                        break;
                     };
 
             }

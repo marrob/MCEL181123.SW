@@ -255,7 +255,13 @@
 
             /*Probléma megjelnítése*/
             if (loopException != null)
-                throw loopException;
+                if ((uint)loopException.HResult == 0x80131500)
+                {
+                    throw loopException;
+                }
+            else
+                    throw loopException;
+
 
             #region Resource Freeing
             if (_handle != 0)

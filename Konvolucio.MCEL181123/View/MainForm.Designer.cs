@@ -30,6 +30,8 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -50,6 +52,9 @@
             this.coulmnUcTemp = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnTrTemp = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.coulmnRunTimeTick = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnRxErr = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnTxErr = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnRxTestCnt = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -158,6 +163,9 @@
             this.coulmnUcTemp,
             this.columnTrTemp,
             this.coulmnRunTimeTick,
+            this.columnRxErr,
+            this.columnTxErr,
+            this.columnRxTestCnt,
             this.columnVersion});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.FirstZebraColor = System.Drawing.Color.Bisque;
@@ -185,17 +193,15 @@
             dataGridViewCellStyle1.NullValue = null;
             this.columnRack.DefaultCellStyle = dataGridViewCellStyle1;
             this.columnRack.Frozen = true;
-            this.columnRack.HeaderText = "Rack";
+            this.columnRack.HeaderText = "Rack [0..15]";
             this.columnRack.Name = "columnRack";
-            this.columnRack.Width = 60;
             // 
             // columnModul
             // 
             this.columnModul.DataPropertyName = "Modul";
             this.columnModul.Frozen = true;
-            this.columnModul.HeaderText = "Modul";
+            this.columnModul.HeaderText = "Modul [0..15]";
             this.columnModul.Name = "columnModul";
-            this.columnModul.Width = 50;
             // 
             // coulmnCrng
             // 
@@ -246,12 +252,18 @@
             // coulmnUcTemp
             // 
             this.coulmnUcTemp.DataPropertyName = "SIG_MCEL_UC_TEMP";
+            dataGridViewCellStyle2.Format = "N2";
+            dataGridViewCellStyle2.NullValue = null;
+            this.coulmnUcTemp.DefaultCellStyle = dataGridViewCellStyle2;
             this.coulmnUcTemp.HeaderText = "uC Temp [°C]";
             this.coulmnUcTemp.Name = "coulmnUcTemp";
             // 
             // columnTrTemp
             // 
             this.columnTrTemp.DataPropertyName = "SIG_MCEL_TR_TEMP";
+            dataGridViewCellStyle3.Format = "N2";
+            dataGridViewCellStyle3.NullValue = null;
+            this.columnTrTemp.DefaultCellStyle = dataGridViewCellStyle3;
             this.columnTrTemp.HeaderText = "Tr Temp [°C]";
             this.columnTrTemp.Name = "columnTrTemp";
             // 
@@ -261,11 +273,29 @@
             this.coulmnRunTimeTick.HeaderText = "Up Time [sec]";
             this.coulmnRunTimeTick.Name = "coulmnRunTimeTick";
             // 
+            // columnRxErr
+            // 
+            this.columnRxErr.DataPropertyName = "SIG_MCEL_RXERRCNT";
+            this.columnRxErr.HeaderText = "Rx Error";
+            this.columnRxErr.Name = "columnRxErr";
+            // 
+            // columnTxErr
+            // 
+            this.columnTxErr.DataPropertyName = "SIG_MCEL_TXERRCNT";
+            this.columnTxErr.HeaderText = "Tx Error";
+            this.columnTxErr.Name = "columnTxErr";
+            // 
+            // columnRxTestCnt
+            // 
+            this.columnRxTestCnt.DataPropertyName = "SIG_MCEL_RXTESTCNT";
+            this.columnRxTestCnt.HeaderText = "Rx Test Cnt";
+            this.columnRxTestCnt.Name = "columnRxTestCnt";
+            // 
             // columnVersion
             // 
             this.columnVersion.DataPropertyName = "SIG_MCEL_VERSION";
-            dataGridViewCellStyle2.Format = "X8";
-            this.columnVersion.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Format = "X8";
+            this.columnVersion.DefaultCellStyle = dataGridViewCellStyle4;
             this.columnVersion.HeaderText = "Version[YYMMDDHH]";
             this.columnVersion.Name = "columnVersion";
             this.columnVersion.Width = 150;
@@ -317,6 +347,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn coulmnUcTemp;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnTrTemp;
         private System.Windows.Forms.DataGridViewTextBoxColumn coulmnRunTimeTick;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnRxErr;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnTxErr;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnRxTestCnt;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnVersion;
     }
 }

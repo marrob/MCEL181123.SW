@@ -17,6 +17,9 @@
         public const string SIG_MCEL_UC_TEMP = "SIG_MCEL_UC_TEMP";
         public const string SIG_MCEL_TR_TEMP = "SIG_MCEL_TR_TEMP";
 
+        public const string SIG_MCEL_RXERRCNT = "SIG_MCEL_RXERRCNT";
+        public const string SIG_MCEL_TXERRCNT = "SIG_MCEL_TXERRCNT";
+        public const string SIG_MCEL_RXTESTCNT = "SIG_MCEL_RXTESTCNT";
         public const string SIG_MCEL_UPTIME = "SIG_MCEL_RUN_TIME_TICK";
         public const string SIG_MCEL_VERSION = "SIG_MCEL_VERSION";
 
@@ -24,5 +27,8 @@
         public const string SIG_PC_CV_SET = "SIG_PC_CV_SET";
         public const string SIG_PC_CC_SET = "SIG_PC_CC_SET";
         public const string SIG_PC_C_MEAS_RNG_SET = "SIG_PC_C_MEAS_RNG_SET";
+        public const string SIG_PC_CLB_MD_SET = "SIG_PC_CLB_MD_SET";
+        public const string SIG_PC_INC_RX_CNT_TRG = "SIG_PC_INC_RX_CNT_TRG";
+
     }
 }
