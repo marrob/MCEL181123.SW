@@ -255,12 +255,16 @@
 
             /*Probléma megjelnítése*/
             if (loopException != null)
-                if ((uint)loopException.HResult == 0x80131500)
-                {
-                    throw loopException;
-                }
-            else
-                    throw loopException;
+            {
+                System.Windows.Forms.MessageBox.Show(loopException.Message);
+            }
+            //if (loopException != null)
+            //    if ((uint)loopException.HResult == 0x80131500)
+            //    {
+            //        throw loopException;
+            //    }
+            //else
+            //        throw loopException;
 
 
             #region Resource Freeing

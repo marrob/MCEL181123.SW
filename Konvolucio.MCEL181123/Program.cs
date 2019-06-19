@@ -246,6 +246,7 @@ namespace Konvolucio.MCEL181123
 #if TRACE
             Debug.WriteLine(GetType().Namespace + "." + GetType().Name + "." + MethodBase.GetCurrentMethod().Name + "()");
 #endif
+            TimerService.Instance.Dispose();
             _ioService.Dispose();
             _mainForm.LayoutSave();
             Settings.Default.Save();
