@@ -32,6 +32,8 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -212,6 +214,9 @@
             // columnVmeas
             // 
             this.columnVmeas.DataPropertyName = "SIG_MCEL_V_MEAS";
+            dataGridViewCellStyle2.Format = "N4";
+            dataGridViewCellStyle2.NullValue = null;
+            this.columnVmeas.DefaultCellStyle = dataGridViewCellStyle2;
             this.columnVmeas.HeaderText = "V meas [V]";
             this.columnVmeas.Name = "columnVmeas";
             this.columnVmeas.ReadOnly = true;
@@ -219,6 +224,8 @@
             // coulmnCmeas
             // 
             this.coulmnCmeas.DataPropertyName = "SIG_MCEL_C_MEAS";
+            dataGridViewCellStyle3.Format = "N4";
+            this.coulmnCmeas.DefaultCellStyle = dataGridViewCellStyle3;
             this.coulmnCmeas.HeaderText = "C meas [A]";
             this.coulmnCmeas.Name = "coulmnCmeas";
             // 
@@ -252,18 +259,18 @@
             // coulmnUcTemp
             // 
             this.coulmnUcTemp.DataPropertyName = "SIG_MCEL_UC_TEMP";
-            dataGridViewCellStyle2.Format = "N2";
-            dataGridViewCellStyle2.NullValue = null;
-            this.coulmnUcTemp.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Format = "N2";
+            dataGridViewCellStyle4.NullValue = null;
+            this.coulmnUcTemp.DefaultCellStyle = dataGridViewCellStyle4;
             this.coulmnUcTemp.HeaderText = "uC Temp [°C]";
             this.coulmnUcTemp.Name = "coulmnUcTemp";
             // 
             // columnTrTemp
             // 
             this.columnTrTemp.DataPropertyName = "SIG_MCEL_TR_TEMP";
-            dataGridViewCellStyle3.Format = "N2";
-            dataGridViewCellStyle3.NullValue = null;
-            this.columnTrTemp.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle5.Format = "N2";
+            dataGridViewCellStyle5.NullValue = null;
+            this.columnTrTemp.DefaultCellStyle = dataGridViewCellStyle5;
             this.columnTrTemp.HeaderText = "Tr Temp [°C]";
             this.columnTrTemp.Name = "columnTrTemp";
             // 
@@ -294,8 +301,8 @@
             // columnVersion
             // 
             this.columnVersion.DataPropertyName = "SIG_MCEL_VERSION";
-            dataGridViewCellStyle4.Format = "X8";
-            this.columnVersion.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle6.Format = "X8";
+            this.columnVersion.DefaultCellStyle = dataGridViewCellStyle6;
             this.columnVersion.HeaderText = "Version[YYMMDDHH]";
             this.columnVersion.Name = "columnVersion";
             this.columnVersion.Width = 150;
