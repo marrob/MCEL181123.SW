@@ -171,9 +171,10 @@ namespace Konvolucio.MCEL181123
             #region StatusBar
             _mainForm.StatusBar = new ToolStripItem[]
             {
+                new StatusBar.AppLogStatus(),
                 new StatusBar.WaitForParseFramesStatus(_ioService),
                 new StatusBar.ParsedFramesStatus(_ioService),
-                new StatusBar.DroppedFramesStatus(_ioService),
+                new StatusBar.DroppedFramesStatus(_ioService),                
                 new StatusBar.EmptyStatus(),
                 new StatusBar.VersionStatus(),
                 new StatusBar.LogoStatus(),

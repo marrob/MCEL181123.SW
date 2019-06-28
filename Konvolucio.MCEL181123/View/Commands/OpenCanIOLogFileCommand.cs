@@ -28,7 +28,7 @@ namespace Konvolucio.MCEL181123.View.Commands
         {
             base.OnClick(e);
             var myProcess = new Process();
-            myProcess.StartInfo.Arguments = "\"" + IoLog.Instance.Path + "\"";
+            myProcess.StartInfo.Arguments = "\"" + IoLog.Instance.FilePath + "\"";
             myProcess.StartInfo.FileName = "Notepad++";
             try
             {

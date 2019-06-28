@@ -132,7 +132,7 @@
 
             uint attrValue = 0;
             _isRunning = true;
-            Exception loopException = null;
+            Exception loopExp = null;
 
             #region Thread Started Publishing
             Action doMehtod = () => OnStarted();
@@ -155,22 +155,20 @@
                 var rx = new NiCan.NCTYPE_CAN_STRUCT();
 
                 /*** Get NC_ATTR_READ_PENDING ***/
-                if ((status = NiCan.ncGetAttribute(_handle, NiCan.NC_ATTR_READ_PENDING, 4, ref attrValue)) != 0)
-                {
-                    loopException = new NiCanIoException(status);
+                loopExp = NiCanStatusCheck(NiCan.ncGetAttribute(_handle, NiCan.NC_ATTR_READ_PENDING, 4, ref attrValue));
+                if (loopExp != null)
                     break;
-                }
+
                 GetWaitForParseFrames = (int)attrValue;
 
                 if (GetWaitForParseFrames != 0)
                 {
-                    GetRxFrames++;
                     /*** Read ***/
-                    if ((status = NiCan.ncRead(_handle, NiCan.CanStructSize, ref rx)) != 0)
-                    {
-                        loopException = new NiCanIoException(status);
+                    loopExp = NiCanStatusCheck(NiCan.ncRead(_handle, NiCan.CanStructSize, ref rx));
+                    if (loopExp != null)
                         break;
-                    }
+                    GetRxFrames++;
+
                     if ((rx.ArbitrationId & 0x20000000) == 0x20000000)
                     { /*Message is Extended */
                         /*Mask*/
@@ -224,13 +222,9 @@
                             niTx.Data7 = tx.Data[7];
 
                             IoLog.Instance.WirteLine("TX " + tx.ArbId.ToString("X8") + " " + Tools.ByteArrayLogString(tx.Data));
-                            
-                            if ((status = NiCan.ncWrite(_handle, NiCan.CanFrameSize, ref niTx)) != 0)
-                            {
-                                loopException = new NiCanIoException(status);
+                            loopExp = NiCanStatusCheck(NiCan.ncWrite(_handle, NiCan.CanFrameSize, ref niTx));
+                            if (loopExp != null)
                                 break;
-                            }
-
                             GetTxFrames++;
                         }
                     }
@@ -254,19 +248,10 @@
             } while (true);
 
             /*Probléma megjelnítése*/
-            if (loopException != null)
+            if (loopExp != null)
             {
-                System.Windows.Forms.MessageBox.Show(loopException.Message);
+                System.Windows.Forms.MessageBox.Show(loopExp.Message);
             }
-            //if (loopException != null)
-            //    if ((uint)loopException.HResult == 0x80131500)
-            //    {
-            //        throw loopException;
-            //    }
-            //else
-            //        throw loopException;
-
-
             #region Resource Freeing
             if (_handle != 0)
             {
@@ -300,6 +285,27 @@
             else
                 doMehtod();
             #endregion
+        }
+
+        Exception NiCanStatusCheck(int status)
+        {
+            if(status != 0)
+                AppLog.Instance.WirteLine(NiCanTools.StatusToString(status));
+
+            switch ((uint)status)
+            {
+                case 0xBFF62023:
+                    {
+                        /* The Interface is invalid or unknown.*/
+                        /* 1. Az Adaptert menetköben eltávolították */
+                        return new NiCanIoException(status);
+                       
+                    }
+                default:
+                   {
+                        return null;
+                   }
+            }
         }
 
         #region NiCan
@@ -338,17 +344,9 @@
         /// <param name="handle"></param>
         void NiCanClose(uint handle)
         {
-            int status = 0;
-
-            /*** Stop ***/
-            status = NiCan.ncAction(handle, NiCan.NC_OP_STOP, 0);
-            if (status != 0)
-                throw new NiCanIoException(status);
-
-            status = NiCan.ncCloseObject(handle);
-            if (status != 0)
-                throw new NiCanIoException(status);
-        }
+            NiCan.ncAction(handle, NiCan.NC_OP_STOP, 0);
+            NiCan.ncCloseObject(handle);
+       }
 
         #endregion
 

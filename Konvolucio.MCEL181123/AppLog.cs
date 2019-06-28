@@ -8,12 +8,15 @@ namespace Konvolucio.MCEL181123
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Forms;
+    using System.Diagnostics;
 
-    public class IoLog
+
+    public class AppLog
     {
-        public static IoLog Instance { get; } = new IoLog();
+        public static AppLog Instance { get; } = new AppLog();
         public string FilePath = Application.StartupPath;
         public bool Enabled;
+        public int Lines;
 
         public double? GetFileSizeKB
         {
@@ -29,16 +32,42 @@ namespace Konvolucio.MCEL181123
             }
         }
 
-        public IoLog()
+        public AppLog()
         {
             Enabled = true;
-            FilePath = "IoLog.txt";
+            FilePath = "AppLog.txt";
+        }
+
+        public int? GetRecodsCount
+        {
+            get
+            {
+                return Lines;
+            }
+        }
+
+        public void FileOpenProces()
+        {
+
+            var myProcess = new Process();
+            myProcess.StartInfo.Arguments = "\"" + FilePath + "\"";
+            myProcess.StartInfo.FileName = "Notepad++";
+            try
+            {
+                myProcess.Start();
+            }
+            catch (Exception)
+            {
+                myProcess.StartInfo.FileName = "Notepad";
+                myProcess.Start();
+            }
         }
 
         public void WirteLine(string line)
         {
             if (Enabled)
             {
+                Lines++;
                 line = DateTime.Now.ToString(AppConstants.GenericTimestampFormat, System.Globalization.CultureInfo.InvariantCulture) + ";" + line + AppConstants.NewLine;
                 var fileWrite = new StreamWriter(FilePath, true, Encoding.ASCII);
                 fileWrite.NewLine = AppConstants.NewLine;

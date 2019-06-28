@@ -29,7 +29,7 @@ namespace Konvolucio.MCEL181123.View.Commands
         {
             base.OnClick(e);
             var myProcess = new Process();
-            myProcess.StartInfo.Arguments = "\"" + Path.GetDirectoryName(Path.GetFullPath(IoLog.Instance.Path)) + "\"";
+            myProcess.StartInfo.Arguments = "\"" + Path.GetDirectoryName(Path.GetFullPath(IoLog.Instance.FilePath)) + "\"";
             myProcess.StartInfo.FileName = "explorer";
             myProcess.Start();
         }

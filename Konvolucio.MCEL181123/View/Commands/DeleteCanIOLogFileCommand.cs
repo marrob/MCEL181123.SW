@@ -27,9 +27,9 @@ namespace Konvolucio.MCEL181123.View.Commands
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
-            if (File.Exists(IoLog.Instance.Path))
+            if (File.Exists(IoLog.Instance.FilePath))
             {
-                File.Delete(IoLog.Instance.Path);
+                File.Delete(IoLog.Instance.FilePath);
                 EventAggregator.Instance.Publish(new RefreshAppEvent(this));
             }
         }

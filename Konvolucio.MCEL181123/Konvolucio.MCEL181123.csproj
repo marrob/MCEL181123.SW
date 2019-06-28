@@ -93,6 +93,7 @@
     <Compile Include="Events\StopAppEvent.cs" />
     <Compile Include="Events\UnitTest_EventAggregator.cs" />
     <Compile Include="Devices\IDevice.cs" />
+    <Compile Include="AppLog.cs" />
     <Compile Include="IoLog.cs" />
     <Compile Include="Devices\MCEL181123DeviceItem.cs" />
     <Compile Include="Devices\MCEL181123DeviceCollection.cs" />
@@ -106,6 +107,9 @@
     <Compile Include="IoService.cs" />
     <Compile Include="NiCan\NiCan_UnitTest_basics.cs" />
     <Compile Include="Database\CanDb.cs" />
+    <Compile Include="StatusBar\AppLogStatus.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="StatusBar\EmptyStatus.cs">
       <SubType>Component</SubType>
     </Compile>
