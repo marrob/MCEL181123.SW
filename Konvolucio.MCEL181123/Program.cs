@@ -15,6 +15,7 @@ namespace Konvolucio.MCEL181123
     using System.ComponentModel;
     using Common;
     using System.Reflection;
+    using System.Text.RegularExpressions;
 
     static class Program
     {
@@ -40,6 +41,7 @@ namespace Konvolucio.MCEL181123
         IMainForm _mainForm;
         Explorer _explorer;
         IIoService _ioService;
+        TcpService _tcpService;
 
         private readonly TreeNode _startTreeNode;
 
@@ -75,7 +77,14 @@ namespace Konvolucio.MCEL181123
             /*** TimerService ***/
             TimerService.Instance.Interval = Settings.Default.GuiRefreshRateMs;
 
-            /*** Menu Bar ***/ 
+            /*** TcpService ***/
+            _tcpService = new TcpService();
+            _tcpService.ParserCallback = TcpServiceParser;
+            _tcpService.Begin(null);
+            _tcpService.Completed += TcpService_Completed;
+
+
+            /*** Menu Bar ***/
             #region MenuBar      
             var configMenu = new ToolStripMenuItem("Config");
             configMenu.DropDown.Items.AddRange(
@@ -183,6 +192,60 @@ namespace Konvolucio.MCEL181123
 
             /*** Run ***/
             Application.Run((MainForm)_mainForm);
+        }
+
+        /*** TcpService ***/
+        private string TcpServiceParser(string line)
+        {
+            line = Regex.Replace(line, @"\s+", " ");
+            var array = line.Trim().Split(' ');
+            var addrStr = array[0].Trim();
+            var command = array[1].Trim();
+
+            byte address = 0;
+            if (!addrStr.Contains("#"))
+                return "Emulator address format is invalid. Use this: '#A1 MEAS:VOLT?' (-???)";
+
+            if (!byte.TryParse(addrStr.Substring(1), out address))
+                return "Data Type Error (-104)";
+
+            if (_explorer.Devices.Count != 0)
+            {    
+                switch (command)
+                {
+                    case "MEAS:CURR?": return _explorer.Devices.FirstOrDefault(n => n.Address == address).SIG_MCEL_C_MEAS.ToString(); 
+                    case "MEAS:VOLT?": return _explorer.Devices.FirstOrDefault(n => n.Address == address).SIG_MCEL_V_MEAS.ToString();
+                    case "VOLT":
+                        {
+                            double par;
+                            if (string.IsNullOrEmpty(array[2]))
+                                return "Missing Paramtert (-109)";
+                            else if (!double.TryParse(array[2], out par))
+                                return "Data Type Error (-104)";
+                            var msg = CanDb.MakeMessage
+                             (
+                              nodeTypeId: CanDb.Instance.Nodes.FirstOrDefault(n => n.Name == NodeCollection.NODE_PC).NodeTypeId,
+                              nodeAddress: address,
+                              broadcast: false,
+                              signal: CanDb.Instance.Signals.FirstOrDefault(n => n.Name == "SIG_PC_CV_SET"),
+                              value: par.ToString()
+                             );
+                            _ioService.TxQueue.Enqueue(msg);
+                            return "OK";
+                        }
+                }                
+            }
+            else
+            {
+                return "Hardware Missing (-241)";
+            }
+
+            return "UNKNOWN";
+        }
+
+        private void TcpService_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            AppLog.Instance.WirteLine(e.Error.Message);
         }
 
         private void Tree_AfterSelect(object sender, TreeViewEventArgs e)

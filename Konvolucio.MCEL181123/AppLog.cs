@@ -68,7 +68,7 @@ namespace Konvolucio.MCEL181123
             if (Enabled)
             {
                 Lines++;
-                line = DateTime.Now.ToString(AppConstants.GenericTimestampFormat, System.Globalization.CultureInfo.InvariantCulture) + ";" + line + AppConstants.NewLine;
+                line = DateTime.Now.ToString(AppConstants.GenericTimestampFormat, System.Globalization.CultureInfo.InvariantCulture) + ";" + line.Trim() + AppConstants.NewLine;
                 var fileWrite = new StreamWriter(FilePath, true, Encoding.ASCII);
                 fileWrite.NewLine = AppConstants.NewLine;
                 fileWrite.Write(line);

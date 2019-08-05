@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppConstants.cs" />
+    <Compile Include="TcpService.cs" />
     <Compile Include="Commands\AlwaysOnTopCommand.cs">
       <SubType>Component</SubType>
     </Compile>

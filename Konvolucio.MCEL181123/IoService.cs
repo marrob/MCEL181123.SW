@@ -1,15 +1,12 @@
 ﻿namespace Konvolucio.MCEL181123
 {
+    using Common;
+    using Events;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Diagnostics;
     using System.Reflection;
-    using Events;
+    using System.Text;
     using System.Threading;
-    using Common;
 
     public interface IIoService : IDisposable
     {
@@ -48,8 +45,8 @@
 
         private Explorer _explorer;
 
-        private AutoResetEvent _shutdownEvent = new AutoResetEvent(false);
-        private AutoResetEvent _readyToDisposeEvent = new AutoResetEvent(false);
+        private AutoResetEvent _shutdownEvent;
+        private AutoResetEvent _readyToDisposeEvent;
 
         public SafeQueue<CanMsg> TxQueue { get; } = new SafeQueue<CanMsg>();
 
@@ -127,7 +124,7 @@
         /// </summary>
         private void DoWork()
         {
-            int status = 0;
+      
 
 
             uint attrValue = 0;
@@ -142,8 +139,14 @@
                 doMehtod();
             #endregion
 
-            _handle = NiCanOpen(CanInterface);
-
+            try
+            {
+                _handle = NiCanOpen(CanInterface);
+            }
+            catch (Exception ex)
+            {
+                loopExp = ex;
+            }
             GetWaitForParseFrames = 0;
             GetDroppedFrames = 0;
             GetParsedFrames = 0;
@@ -152,6 +155,9 @@
             GetWaitForTxFrames  = 0;
             do
             {
+                if (loopExp != null)
+                    break;
+
                 var rx = new NiCan.NCTYPE_CAN_STRUCT();
 
                 /*** Get NC_ATTR_READ_PENDING ***/
@@ -250,7 +256,8 @@
             /*Probléma megjelnítése*/
             if (loopExp != null)
             {
-                System.Windows.Forms.MessageBox.Show(loopExp.Message);
+                AppLog.Instance.WirteLine("DoWork()");
+                
             }
             #region Resource Freeing
             if (_handle != 0)
