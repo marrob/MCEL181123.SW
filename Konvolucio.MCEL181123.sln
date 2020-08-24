@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konvolucio.MCEL181123", "Konvolucio.MCEL181123\Konvolucio.MCEL181123.csproj", "{9C926067-BB6A-4F2F-A87C-57374B9B0923}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BCC23036-3268-4A3A-8E0D-106FC67D5A73}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konvolucio.Cheat", "..\..\..\KonvolucioApp\Konvolucio.Cheat\Konvolucio.Cheat\Konvolucio.Cheat.csproj", "{96C45935-E7E0-4F87-9828-BC350AA19AE4}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Konvolucio.MCEL181123.Setup", "Konvolucio.MCEL181123.Setup\Konvolucio.MCEL181123.Setup.wixproj", "{6A00CEFB-6D95-4A50-A28E-58CDBDD7CAB2}"
 EndProject
@@ -27,14 +25,6 @@ Global
 		{9C926067-BB6A-4F2F-A87C-57374B9B0923}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9C926067-BB6A-4F2F-A87C-57374B9B0923}.Release|x86.ActiveCfg = Release|Any CPU
 		{9C926067-BB6A-4F2F-A87C-57374B9B0923}.Release|x86.Build.0 = Release|Any CPU
-		{96C45935-E7E0-4F87-9828-BC350AA19AE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{96C45935-E7E0-4F87-9828-BC350AA19AE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{96C45935-E7E0-4F87-9828-BC350AA19AE4}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{96C45935-E7E0-4F87-9828-BC350AA19AE4}.Debug|x86.Build.0 = Debug|Any CPU
-		{96C45935-E7E0-4F87-9828-BC350AA19AE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{96C45935-E7E0-4F87-9828-BC350AA19AE4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{96C45935-E7E0-4F87-9828-BC350AA19AE4}.Release|x86.ActiveCfg = Release|Any CPU
-		{96C45935-E7E0-4F87-9828-BC350AA19AE4}.Release|x86.Build.0 = Release|Any CPU
 		{6A00CEFB-6D95-4A50-A28E-58CDBDD7CAB2}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{6A00CEFB-6D95-4A50-A28E-58CDBDD7CAB2}.Debug|x86.ActiveCfg = Debug|x86
 		{6A00CEFB-6D95-4A50-A28E-58CDBDD7CAB2}.Debug|x86.Build.0 = Debug|x86
