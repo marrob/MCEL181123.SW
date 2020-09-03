@@ -256,7 +256,7 @@
             /*Probléma megjelnítése*/
             if (loopExp != null)
             {
-                AppLog.Instance.WirteLine("DoWork()");
+                AppLog.Instance.WriteLine("DoWork()");
                 
             }
             #region Resource Freeing
@@ -297,7 +297,7 @@
         Exception NiCanStatusCheck(int status)
         {
             if(status != 0)
-                AppLog.Instance.WirteLine(NiCanTools.StatusToString(status));
+                AppLog.Instance.WriteLine(NiCanTools.StatusToString(status));
 
             switch ((uint)status)
             {

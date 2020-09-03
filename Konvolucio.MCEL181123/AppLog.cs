@@ -63,7 +63,7 @@ namespace Konvolucio.MCEL181123
             }
         }
 
-        public void WirteLine(string line)
+        public void WriteLine(string line)
         {
             if (Enabled)
             {

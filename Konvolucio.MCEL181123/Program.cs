@@ -143,7 +143,7 @@ namespace Konvolucio.MCEL181123
                 _ioService.TxQueue.Enqueue(msg);
             };
             #endregion
-
+            
             /*** Tree ***/
             #region Tree
             _mainForm.Tree.AfterSelect += Tree_AfterSelect;
@@ -245,7 +245,7 @@ namespace Konvolucio.MCEL181123
 
         private void TcpService_Completed(object sender, RunWorkerCompletedEventArgs e)
         {
-            AppLog.Instance.WirteLine(e.Error.Message);
+            AppLog.Instance.WriteLine(e.Error.Message);
         }
 
         private void Tree_AfterSelect(object sender, TreeViewEventArgs e)
